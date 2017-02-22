@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="cn.jrhlive"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-sdk
+        android:minSdkVersion="19"
+        android:targetSdkVersion="23"/>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+    <application
+        android:name=".JrhApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppDefaultTranslucent">
+        <activity
+            android:name=".splash.SplashActivity"
+            android:theme="@style/AppDefaultTheme">
+        </activity>
+        <activity
+            android:name=".main.ui.MainActivity"
+            android:theme="@style/AppDefaultTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="jrh.live"
+                    android:pathPrefix="/openwith"
+                    android:scheme="jrhapp"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".rxjava.activity.RxJavaMainActivity">
+        </activity>
+        <activity android:name=".ani.AnimationActivity">
+        </activity>
+        <activity android:name=".ani.AniAActivity">
+        </activity>
+        <activity android:name=".ani.AniBActivity">
+        </activity>
+        <activity android:name=".ani.AniCActivity">
+        </activity>
+        <activity android:name=".svg.SvgActivity">
+        </activity>
+        <activity
+            android:name=".test.NavigationActivity"
+            android:label="@string/title_activity_navigation"
+            android:theme="@style/AppDefaultTheme">
+        </activity>
+        <activity android:name=".surfaceview.SurfaceViewActivity">
+        </activity>
+        <activity android:name=".activity.ScrollActivity">
+        </activity>
+        <activity android:name=".main.test.ui.LoginActivity">
+        </activity>
+        <activity android:name=".main.ui.DoubleClickTestActivity">
+        </activity>
+        <activity android:name=".main.ui.ChromeTabsActivity">
+        </activity>
+        <activity android:name=".main.ui.WebViewActivity">
+        </activity>
+        <activity android:name=".eventbus.MainEventBusActivity">
+        </activity>
+        <activity android:name=".eventbus.EeventBusSecondActivity">
+        </activity>
+        <activity android:name=".rxandroid.MainRxAndroidActivity">
+        </activity>
+        <activity android:name=".ani.HeartAniActivity">
+        </activity>
+        <activity android:name=".retrofit.RetrofitActivity">
+        </activity>
+        <activity android:name=".kenburnsview.KenBurnsViewActivity">
+        </activity>
+    </application>
+
+</manifest>

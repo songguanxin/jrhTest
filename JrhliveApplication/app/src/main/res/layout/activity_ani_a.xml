@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/view_root"
+    tools:context="cn.jrhlive.ani.AniAActivity">
+
+    <Button
+        android:id="@+id/btn_a"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="show/hide"
+        android:textAllCaps="false"
+        android:textSize="30sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btn_to_b"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="goB"
+            android:textAllCaps="false"
+            android:textSize="30sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/btn_to_c"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="goC"
+            android:textAllCaps="false"
+            android:textSize="30sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btn1"
+            android:text="change_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/btn2"
+            android:text="change_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <ImageView
+        android:transitionName="circle_aa"
+        android:id="@+id/circle_big"
+        style="@style/AppDefaultTheme.Icon.Big"
+        android:src="@drawable/circle_24dp"
+        />
+    <LinearLayout
+        android:id="@+id/bottom_lay"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+
+            android:id="@+id/tv_left"
+            android:layout_margin="15dp"
+            android:background="@color/color5"
+            android:layout_weight="1"
+            android:text="left"
+            android:textColor="@android:color/white"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"/>
+        <TextView
+
+            android:layout_margin="15dp"
+            android:id="@+id/tv_right"
+            android:layout_weight="1"
+            android:text="right"
+            android:textColor="@android:color/white"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:background="@color/color6"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"/>
+    </LinearLayout>
+
+</LinearLayout>
