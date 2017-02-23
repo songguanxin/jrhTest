@@ -7,5 +7,15 @@ package daywork;
 
 public class Day3 {
 
+//    触摸事件 -----（ViewGroup） dispathTouchEvent(){
+//
+//        if(onInterceptEvent()){
+//            自己处理事件
+//        }else{
+//            View.ontouchEvent()；
+//        }
+//
+//    }
+
 
 }
