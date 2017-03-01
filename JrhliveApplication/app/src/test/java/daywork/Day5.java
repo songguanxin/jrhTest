@@ -3,6 +3,10 @@ package daywork;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -32,6 +36,8 @@ public class Day5 {
     String oldStr2 = "bbbbbb";
     String oldStr3 = "pwwkew";
     String oldStr4 = "okdodopcihdopooijfadjjidlakdjaidjlwo";
+    String oldStr5 = "abbcaecdbb";
+    String a = "aa";
 
     /**
      * 1:先获取其字符数组
@@ -44,13 +50,12 @@ public class Day5 {
 
         char oldChar[] = res.toCharArray();
 
-        int length = 0, maxLen = 0;
+        int length , maxLen =0;
         String str = "";
 
         List<Character> list = new ArrayList<>();
 
         for (int i = 0; i < oldChar.length; i++) {
-            System.out.println("走了"+i);
                 if (!list.contains(oldChar[i])) {
                     list.add(oldChar[i]);
                     length = list.size();
@@ -73,53 +78,161 @@ public class Day5 {
     }
 
 
-    int currentPos;
-    public void method2(String res){
-        if (null==res||res.equals(""))return;
-        char oldChar[] = res.toCharArray();
+    /**
+     * 周
+     */
+    private List<Integer> ints = new ArrayList<>();
+    @Test
+    public void TestA1(){
 
-        int length = 0, maxLen = 0;
-        String str = "";
+        String str = "ababcdefad";
+        StringBuffer sb = new StringBuffer();
+        char[] chars = str.toCharArray();
 
-        List<Character> list = new ArrayList<>();
-
-        for (int i = 0; i < oldChar.length; i++) {
-
-            System.out.println("走了"+i);
-            if (!list.contains(oldChar[i])) {
-                list.add(oldChar[i]);
-                length = list.size();
-                if (maxLen < length) {
-                    maxLen = length;
-                    StringBuffer sb = new StringBuffer();
-                    for (Character c : list){
-                        sb.append(c.toString());
-                    }
-                    str=sb.toString();
-                }
-
-                currentPos=i;
-            } else {
-                i+=currentPos;
-                i--;
-                list.clear();
-
+        for(int i = 0; i < chars.length; i ++){
+            int index = sb.indexOf(String.valueOf(chars[i]));
+            if(index == -1){
+                sb.append(chars[i]);
+                System.out.println("count = " + sb.length() + ",sb = " + sb.toString());
+            }else{
+                ints.add(sb.length());
+                System.out.println("count = " + sb.length() +",i =" +i + ",sb = " + sb.toString());
+                String s = sb.substring(index + 1,sb.length());
+                sb.setLength(0);
+                sb.append(s);
+                sb.append(chars[i]);
+                System.out.println("count = " + sb.length() + ",s = " + s +",index =" +index + ",sb = " + sb.toString());
+            }
+            if(i == chars.length -1){
+                System.out.println("sb = " + sb.toString());
+                ints.add(sb.length());
             }
         }
-        System.out.println(res+"截取字段最大长度="+maxLen+"字符串="+str);
+//        Collections.sort(list);                                              //升序排列
+        Collections.sort(ints,Collections.reverseOrder());                 //降序排列
+        System.out.println("----count = " + ints.get(0) +",");
     }
+
+
+    /**
+     * 任
+     */
+    @Test
+    public void findLongestString() {
+        final String str = "abbcaecdbb";
+        char[] chars = str.toCharArray();
+        String result = null;
+        StringBuilder temp = new StringBuilder();
+        for (char c : chars) {
+            if (temp.indexOf(String.valueOf(c)) >= 0) {
+                if (result == null || temp.length() > result.length()) {
+                    result = temp.toString();
+                }
+                temp.delete(0, temp.length());
+            }
+            temp.append(c);
+        }
+        System.out.println(result);
+    }
+
+    /**
+     * 宋
+     * @param str
+     * @return
+     */
+    public static String[] getNonRepet3(String str) {
+        char[] chars = str.toCharArray();
+        System.out.println(Arrays.toString(chars));
+        // 存放结果
+        HashSet<String> results = new HashSet<>();
+
+        HashSet<Character> room = new HashSet<>();
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < chars.length; i++) {
+            if (!room.add(chars[i])) {
+                room.clear();
+                room.add(chars[i]);
+                results.add(builder.toString());
+                builder = new StringBuilder();
+                builder.append(chars[i]);
+                continue;
+            }
+            builder.append(chars[i]);
+        }
+        results.add(builder.toString());
+        String[] values = results.toArray(new String[] {});
+        System.out.println("排序前： "+Arrays.toString(values));
+        Arrays.sort(values, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.length() - o2.length();
+            }
+        });
+        System.out.println("排序后：  "+Arrays.toString(values));
+        for (int i = values.length - 1; i >= 1; i--) {
+            if (values[i].length() > values[i - 1].length()) {
+                values =Arrays.copyOfRange(values,i, values.length);
+                break;
+            }
+        }
+        System.out.println("最终结果 == "+Arrays.toString(values));
+        return values;
+
+    }
+
+
+    private String str = "ajkda";
+    int length;
+    boolean b =false;
+
+    @Test
+    public void testBin() {
+        byte[] arr = str.getBytes();
+        List<Byte> list = new ArrayList<>();
+        for (int i = 0; i < arr.length; i++) {
+            list.add(arr[i]);
+        }
+
+        int size = list.size();
+        List<Byte> listByte = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            if (listByte.size() == 0) {
+                listByte.add(list.get(i));
+            } else {
+                for (int j = 0; j <listByte.size() ; j++) {
+                    if (list.get(i).equals(listByte.get(j))) {
+                        b = true;
+                        break;
+                    }
+                }
+                if (b) {
+                    if (listByte.size()>length) {
+                        length = listByte.size();
+                    }
+                    listByte.clear();
+                    listByte.add(list.get(i));
+                    b = false;
+                }else {
+                    listByte.add(list.get(i));
+                }
+            }
+        }
+        System.out.println(length);
+
+    }
+
+
 
     @Test
     public void test(){
-        method1(oldStr1);
-        method1(oldStr2);
-        method1(oldStr3);
-        method1(oldStr4);
+//        method1(oldStr1);
+//        method1(oldStr2);
+//        method1(oldStr3);
+//        method1(oldStr4);
+        method1(oldStr5);
+        System.out.println(getNonRepet3(oldStr5));
 
-        System.out.println("##############################");
-        method2(oldStr1);
-        method2(oldStr2);
-        method2(oldStr3);
-        method2(oldStr4);
     }
 }
+
+

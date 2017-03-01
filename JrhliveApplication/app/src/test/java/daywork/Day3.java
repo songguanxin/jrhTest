@@ -11,8 +11,9 @@ public class Day3 {
 //
 //        if(onInterceptEvent()){
 //            自己处理事件
+//             ViewGroup.onTouchEvent();
 //        }else{
-//            View.ontouchEvent()；
+//            View.onTouchEvent()；
 //        }
 //
 //    }
