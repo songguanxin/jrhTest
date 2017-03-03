@@ -1,8 +1,5 @@
 package cn.jrhlive.main.first.interactor.imp;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,14 +34,14 @@ public class MainInteractorImp implements MainInteractor {
     @Override
     public void loadMainItems(final RequestCallBack callBack) {
 
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                callBack.onSuccess(datas);
-              
-            }
-        },2000);
-
+//        Handler handler = new Handler(Looper.getMainLooper());
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                callBack.onSuccess(datas);
+//
+//            }
+//        },2000);
+        callBack.onSuccess(datas);
     }
 }
