@@ -38,4 +38,31 @@ public class Day7 {
         System.out.println(testStr(str)+"时间复杂度O(n)");
     }
 
+    @Test
+    public void testsort(){
+
+        char[] chars = str.toCharArray();
+
+        int pos=0;
+
+        for (int i = 0; i <chars.length ; i++) {
+
+            if (Character.isUpperCase(chars[i])){
+                for (int j = i+1; j <chars.length-1 ; j++) {
+
+                    if (!Character.isUpperCase(chars[j])){
+                        char temp = chars[i];
+                        chars[i]=chars[j];
+                        chars[j]=temp;
+                    }
+                }
+            }
+        }
+
+        for (Character c :chars){
+            System.out.print(c.toString());
+        }
+
+    }
+
 }

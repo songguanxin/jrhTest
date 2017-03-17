@@ -24,7 +24,11 @@ public class MainInteractorImp implements MainInteractor {
             new MainItem("EventBus",7),
             new MainItem("RxAndroid",8),
             new MainItem("Retrofit",9),
-            new MainItem("KenBurnsView",10)
+            new MainItem("KenBurnsView",10),
+            new MainItem("ConstraintLayout",11),
+            new MainItem("BallAniDownUp",12),
+            new MainItem("testActivity",13)
+
     );
 
     public List<MainItem> getDatas(){

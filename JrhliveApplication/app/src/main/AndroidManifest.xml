@@ -21,15 +21,15 @@
         <activity
             android:name=".splash.SplashActivity"
             android:theme="@style/AppDefaultTheme">
-        </activity>
-        <activity
-            android:name=".main.ui.MainActivity"
-            android:theme="@style/AppDefaultTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".main.ui.MainActivity"
+            android:theme="@style/AppDefaultTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -82,6 +82,12 @@
         <activity android:name=".retrofit.RetrofitActivity">
         </activity>
         <activity android:name=".kenburnsview.KenBurnsViewActivity">
+        </activity>
+        <activity android:name=".constraintLayout.ConstraintLayoutActivity">
+        </activity>
+        <activity android:name=".ani.BallDownUpActivity">
+        </activity>
+        <activity android:name=".activity.TestActivity">
         </activity>
     </application>
 

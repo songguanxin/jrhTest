@@ -21,7 +21,10 @@ import butterknife.BindView;
 import cn.jrhlive.R;
 import cn.jrhlive.activity.BaseActivity;
 import cn.jrhlive.activity.ScrollActivity;
+import cn.jrhlive.activity.TestActivity;
 import cn.jrhlive.ani.AnimationActivity;
+import cn.jrhlive.ani.BallDownUpActivity;
+import cn.jrhlive.constraintLayout.ConstraintLayoutActivity;
 import cn.jrhlive.eventbus.MainEventBusActivity;
 import cn.jrhlive.kenburnsview.KenBurnsViewActivity;
 import cn.jrhlive.main.entity.MainItem;
@@ -141,6 +144,15 @@ public class MainActivity extends BaseActivity implements MainView {
                         break;
                     case 10:
                         ActivityUtils.startActivity(MainActivity.this, KenBurnsViewActivity.class);
+                        break;
+                    case 11:
+                        ActivityUtils.startActivity(MainActivity.this, ConstraintLayoutActivity.class);
+                        break;
+                    case 12:
+                        ActivityUtils.startActivity(MainActivity.this, BallDownUpActivity.class);
+                        break;
+                    case 13:
+                        ActivityUtils.startActivity(MainActivity.this, TestActivity.class);
                         break;
                 }
             }

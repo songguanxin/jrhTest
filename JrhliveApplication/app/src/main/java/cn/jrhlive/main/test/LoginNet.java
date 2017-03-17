@@ -15,7 +15,6 @@ public class LoginNet implements LoginInter {
     public void login(String name, String psd, RequestCallBack<Result> callBack) {
         if (!TextUtils.isEmpty(name)&&!TextUtils.isEmpty(psd)){
             if(name.equals("android")&&psd.equals("123456")){
-
                 if (callBack!=null)
                     callBack.onSuccess(new Result(0,"success"));
 

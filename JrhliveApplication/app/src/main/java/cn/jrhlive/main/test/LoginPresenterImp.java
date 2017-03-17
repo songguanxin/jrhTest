@@ -57,8 +57,8 @@ public class LoginPresenterImp implements LoginPresenter {
 
     @Override
     public boolean isValidate() {
-        if (name.length()>90){
-            return false;
+        if (name.length()>0){
+            return true;
         }
 
         return false;

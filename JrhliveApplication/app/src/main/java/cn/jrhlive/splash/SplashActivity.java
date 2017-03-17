@@ -6,7 +6,7 @@ import com.jrhlibrary.utils.ActivityUtils;
 import butterknife.BindView;
 import cn.jrhlive.R;
 import cn.jrhlive.activity.BaseActivity;
-import cn.jrhlive.main.ui.MainActivity;
+import cn.jrhlive.main.test.ui.LoginActivity;
 import me.wangyuwei.particleview.ParticleView;
 
 public class SplashActivity extends BaseActivity {
@@ -22,7 +22,7 @@ public class SplashActivity extends BaseActivity {
         pvView.setOnParticleAnimListener(new ParticleView.ParticleAnimListener() {
             @Override
             public void onAnimationEnd() {
-                ActivityUtils.startActivity(SplashActivity.this, MainActivity.class);
+                ActivityUtils.startActivity(SplashActivity.this, LoginActivity.class);
                 finish();
             }
         });
