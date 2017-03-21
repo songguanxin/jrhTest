@@ -6,4 +6,7 @@ package daywork;
  */
 
 public class Day20 {
+
+    //SvgSecondActivity
 }
+

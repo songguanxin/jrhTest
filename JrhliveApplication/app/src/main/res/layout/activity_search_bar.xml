@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/activity_search_bar"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="cn.jrhlive.ani.SearchBarActivity">
+
+<TextView
+    android:padding="@dimen/_10dp"
+    android:text="Day21"
+    android:textColor="#fff"
+    android:gravity="center"
+    android:background="#3F51B5"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"/>
+
+    <EditText
+        android:background="#cecece"
+        android:padding="@dimen/_10dp"
+        android:hint="搜索"
+        android:transitionName="searchview"
+        android:id="@+id/sv_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </EditText>
+
+</LinearLayout>

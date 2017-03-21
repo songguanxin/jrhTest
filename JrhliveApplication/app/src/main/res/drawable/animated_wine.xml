@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:drawable="@drawable/wine">
+    <target
+        android:animation="@animator/hand_ani"
+        android:name="wine1"></target>
+    <target
+        android:animation="@animator/hand_ani"
+        android:name="wine2"></target>
+    <target
+        android:animation="@animator/hand_ani"
+        android:name="wine3"></target>
+    <target
+        android:animation="@animator/hand_ani"
+        android:name="wine4"></target>
+    <target
+        android:animation="@animator/hand_ani"
+        android:name="wine5"></target>
+</animated-vector>

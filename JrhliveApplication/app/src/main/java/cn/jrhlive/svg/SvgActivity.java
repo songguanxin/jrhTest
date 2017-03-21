@@ -1,9 +1,13 @@
 package cn.jrhlive.svg;
 
 import android.graphics.drawable.Animatable;
+import android.widget.Button;
 import android.widget.ImageView;
 
+import com.jrhlibrary.utils.ActivityUtils;
+
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.jrhlive.R;
 import cn.jrhlive.activity.BaseActivity;
 
@@ -14,6 +18,8 @@ public class SvgActivity extends BaseActivity {
     ImageView ivSvg;
     @BindView(R.id.iv_lion)
     ImageView ivLion;
+    @BindView(R.id.btn_to_second)
+    Button btnToSecond;
 
     @Override
     protected void initEvent() {
@@ -38,4 +44,9 @@ public class SvgActivity extends BaseActivity {
 
 
 
+    @OnClick(R.id.btn_to_second)
+    public void onClick() {
+
+        ActivityUtils.startActivity(this,SvgSecondActivity.class);
+    }
 }

@@ -9,7 +9,14 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cn.jrhlive.svg.SvgActivity">
+    <Button
+        android:id="@+id/btn_to_second"
+        android:text="Next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 <ImageView
+    android:layout_below="@+id/btn_to_second"
     android:id="@+id/iv_svg"
     android:visibility="visible"
     android:src="@drawable/animated_hand"
@@ -21,4 +28,5 @@
     android:src="@drawable/animated_lion"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"/>
+
 </RelativeLayout>

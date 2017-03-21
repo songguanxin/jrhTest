@@ -30,4 +30,14 @@
         android:layout_marginStart="50dp"
         android:layout_marginBottom="40dp"
         android:id="@+id/button4"/>
+
+    <Button
+        android:text="RxLeakTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="31dp"
+        android:id="@+id/btn_leak"
+        android:layout_alignBaseline="@+id/button4"
+        android:layout_alignBottom="@+id/button4"
+        android:layout_toEndOf="@+id/button4"/>
 </RelativeLayout>

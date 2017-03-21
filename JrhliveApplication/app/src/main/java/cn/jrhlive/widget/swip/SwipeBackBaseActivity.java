@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.Utils;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivityBase;
@@ -13,7 +15,7 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivityHelper;
  * desc: 滑动
  * Created by jiarh on 16/9/13 14:38.
  */
-public class SwipeBackBaseActivity extends AppCompatActivity implements SwipeBackActivityBase {
+public class SwipeBackBaseActivity extends RxAppCompatActivity implements SwipeBackActivityBase {
 
     private SwipeBackActivityHelper mHelper;
 

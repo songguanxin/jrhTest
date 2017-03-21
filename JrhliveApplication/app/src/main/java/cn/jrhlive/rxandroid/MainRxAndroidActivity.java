@@ -2,8 +2,10 @@ package cn.jrhlive.rxandroid;
 
 import android.util.Log;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -34,6 +36,10 @@ public class MainRxAndroidActivity extends BaseActivity {
 
     AsyncSubject<Integer> asyncSubject = AsyncSubject.create();
     BehaviorSubject<Integer> behaviorSubject = BehaviorSubject.createDefault(-1);
+    @BindView(R.id.btn_leak)
+    Button btnLeak;
+    @BindView(R.id.activity_main_rx_android)
+    RelativeLayout activityMainRxAndroid;
 
     @Override
     protected void initEvent() {
@@ -73,6 +79,20 @@ public class MainRxAndroidActivity extends BaseActivity {
 
     }
 
+    @OnClick(R.id.btn_leak)
+    public void onLeakClicked() {
+
+        Observable.interval(1, 1, TimeUnit.SECONDS)
+                .compose(this.<Long>bindToLifecycle())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        System.out.println(new Date().toString());
+                    }
+                });
+
+    }
+
     private void testSubjct(Subject subject) {
         subject.subscribe(new Consumer<Integer>() {
             @Override
@@ -93,7 +113,7 @@ public class MainRxAndroidActivity extends BaseActivity {
                         System.out.println("$$$$$$");
                         System.out.println(String.valueOf(aLong));
                     }
-        });
+                });
     }
 
     public void refreshTv() {
@@ -132,5 +152,5 @@ public class MainRxAndroidActivity extends BaseActivity {
 
     }
 
-
 }
+

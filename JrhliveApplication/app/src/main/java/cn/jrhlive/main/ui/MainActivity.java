@@ -21,7 +21,7 @@ import butterknife.BindView;
 import cn.jrhlive.R;
 import cn.jrhlive.activity.BaseActivity;
 import cn.jrhlive.activity.ScrollActivity;
-import cn.jrhlive.activity.TestActivity;
+import cn.jrhlive.test.TestActivity;
 import cn.jrhlive.ani.AnimationActivity;
 import cn.jrhlive.ani.BallDownUpActivity;
 import cn.jrhlive.constraintLayout.ConstraintLayoutActivity;

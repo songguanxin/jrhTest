@@ -2,11 +2,11 @@ package cn.jrhlive.ani;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jrhlive.R;
 import cn.jrhlive.activity.BaseActivity;
@@ -48,12 +47,22 @@ public class AnimationActivity extends BaseActivity {
     ImageView circle;
     @BindView(R.id.btn_heart)
     Button btnHeart;
+    @BindView(R.id.sv_search)
+    EditText svSearch;
 
     @Override
     protected void initEvent() {
 
         AnimationUtils.setExitWindowAni(this);
         AnimationUtils.setReenterWindowAni(this);
+
+
+
+    }
+
+    @OnClick(R.id.sv_search)
+    public void goSearch() {
+        ActivityUtils.startActivity(this,SearchBarActivity.class);
     }
 
     @Override
@@ -96,6 +105,7 @@ public class AnimationActivity extends BaseActivity {
 
     @OnClick(R.id.btn_heart)
     public void onClick() {
-        ActivityUtils.startActivity(this,HeartAniActivity.class);
+        ActivityUtils.startActivity(this, HeartAniActivity.class);
     }
+
 }
