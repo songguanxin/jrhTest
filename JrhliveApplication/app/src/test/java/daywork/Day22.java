@@ -2,6 +2,9 @@ package daywork;
 
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * desc:
  * 有一个系统，用来接收用户的输入的数字并转化成乱序的英文串，
@@ -18,26 +21,45 @@ import org.junit.Test;
 
 public class Day22 {
 
-    String numEng[]={"one","two","three","four","five","six","seven","eight","nine","ten"};
-    String randomStr="onwetrefisx";
-    String resultNum;
 
+
+    String numEng[]={"zero","one","two","three","four","five","six","seven","eight","nine"};
+    String randomStr="otwthrefosinineightexureone";
     @Test
     public void testResult(){
+
         StringBuffer sb = new StringBuffer();
+        StringBuffer ranStrSb = new StringBuffer(randomStr);
         for (int i = 0; i <numEng.length ; i++) {
             int isExist=0;
             char cc[] = numEng[i].toCharArray();
+            Map<Integer,Integer> tmap = new HashMap<>();
             for (int j = 0; j <cc.length ; j++) {
-                if (randomStr.indexOf(cc[j])>-1){
+                int position=-1;
+                if ((position=randomStr.indexOf(cc[j]))>-1){
                     isExist++;
+                    tmap.put(j,position);
                 }
                 if (isExist==cc.length){
-                    sb.append(i+1+",");
+                    sb.append(i);
+                    for (int k =0;k<tmap.size();k++){
+
+                        ranStrSb.setCharAt(tmap.get(k),'0');
+
+                    }
+                    randomStr = ranStrSb.toString();
                 }
             }
         }
         System.out.println(sb.toString());
     }
+
+
+    @Test
+    public void testIndex(){
+
+        System.out.println(randomStr.indexOf("n"));
+    }
+
 
 }

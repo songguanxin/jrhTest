@@ -5,10 +5,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.jrhlibrary.utils.ActivityUtils;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -77,11 +80,7 @@ public class MainEventBusActivity extends BaseActivity {
         refreshUi(eventBusEvent);
     }
 
-    private void refreshUi(EventBusEvent eventBusEvent) {
-        if (eventBusEvent != null) {
-            tv.setText(eventBusEvent.getMsg());
-        }
-    }
+
 
     /**
      * 同发起线程
@@ -136,14 +135,43 @@ public class MainEventBusActivity extends BaseActivity {
         disposable = RxBus.getDefault().toObservable(EventBusEvent.class)
                 .subscribeOn(new ComputationScheduler())
                 .observeOn(AndroidSchedulers.mainThread())
+                .delay(3,TimeUnit.SECONDS)
                 .subscribe(new Consumer<EventBusEvent>() {
                     @Override
                     public void accept(EventBusEvent eventBusEvent) throws Exception {
                         refreshUi(eventBusEvent);
-
                     }
 
                 });
 
+
+         RxBus.getDefault().toObservable(EventBusEvent.class)
+                .subscribeOn(new ComputationScheduler())
+                 .delay(5, TimeUnit.SECONDS)
+                 .compose(this.<EventBusEvent>bindUntilEvent(ActivityEvent.STOP))
+                 .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<EventBusEvent>() {
+                    @Override
+                    public void accept(EventBusEvent eventBusEvent) throws Exception {
+                        refreshUi2(eventBusEvent);
+
+                    }
+
+                });
     }
+    private void refreshUi(final EventBusEvent eventBusEvent) {
+        if (eventBusEvent != null) {
+//            tv.setText(eventBusEvent.getMsg());
+            System.out.println("aaaaaaaaaaa");
+
+        }
+    }
+    private void refreshUi2(final EventBusEvent eventBusEvent) {
+        if (eventBusEvent != null) {
+//            tv.setText(eventBusEvent.getMsg());
+            System.out.println("bbbbbbbb");
+
+        }
+    }
+
 }

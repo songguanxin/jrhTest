@@ -5,6 +5,8 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.trello.rxlifecycle2.android.ActivityEvent;
+
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -82,12 +84,41 @@ public class MainRxAndroidActivity extends BaseActivity {
     @OnClick(R.id.btn_leak)
     public void onLeakClicked() {
 
+        /**
+         * 内存泄漏，activity finish()后还在输出，除非杀死进程，则停止
+         */
+        Observable.interval(1, 1, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+
+                        System.out.println("000000000000000="+new Date().toString());
+                    }
+                });
+
+        /**
+         * 伴随activity的生命周期，stop时，停止打印
+         */
         Observable.interval(1, 1, TimeUnit.SECONDS)
                 .compose(this.<Long>bindToLifecycle())
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        System.out.println(new Date().toString());
+
+                        System.out.println("1111111111111111111="+new Date().toString());
+                    }
+                });
+
+
+        /**
+         * 到destory()方法执行时，不在打印，按home键，应该仍有输出
+         */
+        Observable.interval(1, 1, TimeUnit.SECONDS)
+                .compose(this.<Long>bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        System.out.println("2222222222222222="+new Date().toString());
                     }
                 });
 
