@@ -21,11 +21,12 @@ import butterknife.BindView;
 import cn.jrhlive.R;
 import cn.jrhlive.activity.BaseActivity;
 import cn.jrhlive.activity.ScrollActivity;
-import cn.jrhlive.test.TestActivity;
 import cn.jrhlive.ani.AnimationActivity;
 import cn.jrhlive.ani.BallDownUpActivity;
+import cn.jrhlive.bottomnavigationbar.BottomNavigationBarActivity;
 import cn.jrhlive.constraintLayout.ConstraintLayoutActivity;
 import cn.jrhlive.eventbus.MainEventBusActivity;
+import cn.jrhlive.imgcrop.ImageCropActivity;
 import cn.jrhlive.kenburnsview.KenBurnsViewActivity;
 import cn.jrhlive.main.entity.MainItem;
 import cn.jrhlive.main.first.interactor.imp.MainInteractorImp;
@@ -33,14 +34,20 @@ import cn.jrhlive.main.first.presenter.imp.MainPresenterImp;
 import cn.jrhlive.main.first.view.MainView;
 import cn.jrhlive.main.second.imp.SMainInteractorImp;
 import cn.jrhlive.main.second.imp.SMainPresenterImp;
+import cn.jrhlive.nestscrolling.NestScrollActivity;
+import cn.jrhlive.qiniuplayer.activity.PlayerMainActivity;
+import cn.jrhlive.qupai.QupaiActivity;
+import cn.jrhlive.recycleview.MultiItemRecycleViewActivity;
 import cn.jrhlive.retrofit.RetrofitActivity;
+import cn.jrhlive.ritchtext.RitchTextActivity;
 import cn.jrhlive.rxandroid.MainRxAndroidActivity;
 import cn.jrhlive.surfaceview.SurfaceViewActivity;
 import cn.jrhlive.svg.SvgActivity;
 import cn.jrhlive.test.NavigationActivity;
+import cn.jrhlive.test.TableActivity;
+import cn.jrhlive.test.TestActivity;
 import cn.jrhlive.utils.ToastUtil;
-
-
+import cn.jrhlive.widget.bezeiercurve.BezeierCurveActivity;
 
 
 public class MainActivity extends BaseActivity implements MainView {
@@ -153,6 +160,33 @@ public class MainActivity extends BaseActivity implements MainView {
                         break;
                     case 13:
                         ActivityUtils.startActivity(MainActivity.this, TestActivity.class);
+                        break;
+                    case 14:
+                        ActivityUtils.startActivity(MainActivity.this, PlayerMainActivity.class);
+                        break;
+                    case 15:
+                        ActivityUtils.startActivity(MainActivity.this, QupaiActivity.class);
+                        break;
+                    case 16:
+                        ActivityUtils.startActivity(MainActivity.this, NestScrollActivity.class);
+                        break;
+                    case 17:
+                        ActivityUtils.startActivity(MainActivity.this,BottomNavigationBarActivity.class);
+                        break;
+                    case 18:
+                        ActivityUtils.startActivity(MainActivity.this,RitchTextActivity.class);
+                        break;
+                    case 19:
+                        ActivityUtils.startActivity(MainActivity.this,ImageCropActivity.class);
+                        break;
+                    case 20:
+                        ActivityUtils.startActivity(MainActivity.this,TableActivity.class);
+                        break;
+                    case 21:
+                        ActivityUtils.startActivity(MainActivity.this,MultiItemRecycleViewActivity.class);
+                        break;
+                    case 22:
+                        ActivityUtils.startActivity(MainActivity.this,BezeierCurveActivity.class);
                         break;
                 }
             }

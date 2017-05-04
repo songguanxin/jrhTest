@@ -23,6 +23,8 @@ public class JrhApplication extends Application {
         Stetho.initializeWithDefaults(this);
 //        JrhApplicationContext.application = this;
 //        JrhApplicationContext.context = this;
+//        QuPaiManagerUtil.init();
+
     }
     public JrhApplication getApplicationContext(){
         return APP;

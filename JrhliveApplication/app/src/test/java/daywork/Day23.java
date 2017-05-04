@@ -16,5 +16,32 @@ public class Day23 {
 //    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
 //    spannableStringBuilder.setSpan(span, 0, 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //    etSpan.setText(spannableStringBuilder);
+
+
+//    textsize = TextVew.getTextSize();//返回的是像素
+
+//    public static ImageSpan getInputAitSpan(String name, float textsize) {
+//        if (TextUtils.isEmpty(name)) {
+//            return null;
+//        }
+//        Paint paint = new Paint();
+//        paint.setColor(Color.BLACK);
+//        paint.setAntiAlias(true);
+//        paint.setTextSize(textsize);
+//        Rect rect = new Rect();
+//
+//        paint.getTextBounds(name, 0, name.length(), rect);
+//
+//        // 获取字符串在屏幕上的长度
+//        int width = (int) (paint.measureText(name));
+//
+//        final Bitmap bmp = Bitmap.createBitmap(width, rect.height(),
+//                Bitmap.Config.ARGB_8888);
+//        Canvas canvas = new Canvas(bmp);
+//
+//        canvas.drawText(name, rect.left, rect.height() - rect.bottom, paint);
+//
+//        return new ImageSpan(context, bmp, ImageSpan.ALIGN_BOTTOM);
+//    }
 //
 }

@@ -6,10 +6,14 @@
         android:minSdkVersion="19"
         android:targetSdkVersion="23"/>
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:name=".JrhApplication"
@@ -21,15 +25,15 @@
         <activity
             android:name=".splash.SplashActivity"
             android:theme="@style/AppDefaultTheme">
+        </activity>
+        <activity
+            android:name=".main.ui.MainActivity"
+            android:theme="@style/AppDefaultTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".main.ui.MainActivity"
-            android:theme="@style/AppDefaultTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -92,10 +96,38 @@
         <activity android:name=".svg.SvgSecondActivity">
         </activity>
         <activity
-            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
-            android:name=".ani.SearchBarActivity">
+            android:name=".ani.SearchBarActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
         </activity>
         <activity android:name=".ani.SearchDetailActivity">
+        </activity>
+        <activity android:name=".qiniuplayer.activity.PlayerMainActivity">
+        </activity>
+        <activity android:name=".test.testBrowser.ActivityA">
+        </activity>
+        <activity
+            android:name=".test.testBrowser.BrowserActivity"
+            android:process=":browser">
+        </activity>
+        <activity android:name=".qupai.QupaiActivity">
+        </activity>
+        <activity android:name=".nestscrolling.NestScrollActivity">
+        </activity>
+        <activity android:name=".bottomnavigationbar.BottomNavigationBarActivity">
+        </activity>
+        <activity android:name=".ritchtext.RitchTextActivity">
+        </activity>
+        <activity android:name=".imgcrop.ImageCropActivity">
+        </activity>
+        <activity android:name=".test.TableActivity">
+        </activity>
+        <activity android:name=".ani.SpringAniActivity">
+        </activity>
+        <activity android:name=".ani.FllowBehaviorActivity">
+        </activity>
+        <activity android:name=".recycleview.MultiItemRecycleViewActivity">
+        </activity>
+        <activity android:name=".widget.bezeiercurve.BezeierCurveActivity">
         </activity>
     </application>
 

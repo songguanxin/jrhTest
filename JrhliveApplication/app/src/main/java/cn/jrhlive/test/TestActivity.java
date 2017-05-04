@@ -1,27 +1,19 @@
 package cn.jrhlive.test;
 
 
-import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Drawable;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.DynamicDrawableSpan;
-import android.text.style.ImageSpan;
+import android.support.animation.SpringAnimation;
+import android.support.animation.SpringForce;
 import android.view.View;
-import android.widget.EditText;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
-import butterknife.BindView;
 import cn.jrhlive.R;
 import cn.jrhlive.activity.BaseActivity;
 
 public class TestActivity extends BaseActivity {
+    ImageView img;
 
-
-    @BindView(R.id.iv_menu)
-    ImageView ivMenu;
-    @BindView(R.id.et_span)
-    EditText etSpan;
+    float defaultX, defaultY;
 
     @Override
     protected void initEvent() {
@@ -31,26 +23,42 @@ public class TestActivity extends BaseActivity {
     @Override
     protected void initView() {
 
-        String str = "android";
-        etSpan.setText(str);
-        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(str);
-        Drawable drawable = getDrawable(R.mipmap.ic_launcher);
-        ImageSpan span = new ImageSpan(drawable, str, DynamicDrawableSpan.ALIGN_BOTTOM);
-        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-        spannableStringBuilder.setSpan(span, 0, 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        etSpan.setText(spannableStringBuilder);
+        img = (ImageView) this.findViewById(R.id.img);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createAnim(true).start();
+                createAnim(false).start();
+            }
+        });
+
+        img.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                defaultX = img.getScaleX();
+                defaultY = img.getScaleY();
+
+                img.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
 
     }
 
-    public void menu(View v) {
-        if (ivMenu.getDrawable() instanceof Animatable) {
-            ((Animatable) ivMenu.getDrawable()).start();
-        }
+    private SpringAnimation createAnim(boolean x) {
+        SpringAnimation springAnimation = new SpringAnimation(img, x ? SpringAnimation.SCALE_X : SpringAnimation.SCALE_Y);
+        SpringForce springForce = new SpringForce();
+        springForce.setDampingRatio(SpringForce.DAMPING_RATIO_HIGH_BOUNCY);
+        springForce.setStiffness(SpringForce.STIFFNESS_MEDIUM);
+        springForce.setFinalPosition(x ? defaultX : defaultY);
+        springAnimation.setStartValue(0.5f);
+        springAnimation.setSpring(springForce);
+        return springAnimation;
     }
 
     @Override
     protected int getViewId() {
-        return R.layout.activity_test;
+        return R.layout.activity_spring;
     }
 
 

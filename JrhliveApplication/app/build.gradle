@@ -7,33 +7,39 @@ dependencies {
     compile project(':jrhlibrary')
     compile('com.tencent.tinker:tinker-android-lib:1.7.3') { changing = true }
     provided('com.tencent.tinker:tinker-android-anno:1.7.3') { changing = true }
+
+    compile(name: 'qupaisdk-release', ext: 'aar')
+    //七牛
+    //    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2'
+    // If you want to bind to Android-specific lifecycles
+    // If you want pre-written Activities and Fragments you can subclass as providers
+
+
     compile 'com.jakewharton:butterknife:8.4.0'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.6.4'
     compile 'com.android.support:multidex:1.0.1'
-    provided 'com.android.support:appcompat-v7:25.2.0'
-    testCompile 'junit:junit:4.12'
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.qiniu:happy-dns:0.2.+'
     compile 'com.flaviofaria:kenburnsview:1.0.7'
-    testCompile 'org.mockito:mockito-core:2.7.12'
     compile 'org.mockito:mockito-android:2.7.12'
+    compile 'com.android.support.constraint:constraint-layout:1.0.1'
+    compile 'com.trello.rxlifecycle2:rxlifecycle:2.0.1'
+    compile 'com.trello.rxlifecycle2:rxlifecycle-android:2.0.1'
+    compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.0.1'
+    compile 'com.facebook.rebound:rebound:0.3.8'
+    compile 'com.google.dagger:dagger:2.0.1'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
+    compile 'com.android.support:support-dynamic-animation:25.3.0'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.7.12'
+    testCompile 'org.robolectric:robolectric:3.3.1'
+    testCompile 'org.khronos:opengl-api:gl1.1-android-2.1_r1'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
-//    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2'
-    compile 'com.android.support.constraint:constraint-layout:1.0.1'
-    testCompile 'org.robolectric:robolectric:3.3.1'
-    testCompile 'org.khronos:opengl-api:gl1.1-android-2.1_r1'
-
-    compile 'com.trello.rxlifecycle2:rxlifecycle:2.0.1'
-
-// If you want to bind to Android-specific lifecycles
-    compile 'com.trello.rxlifecycle2:rxlifecycle-android:2.0.1'
-
-// If you want pre-written Activities and Fragments you can subclass as providers
-    compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.0.1'
-
     androidTestCompile 'com.google.code.findbugs:jsr305:3.0.1'
-
-
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    provided 'com.android.support:appcompat-v7:25.2.0'
+    provided 'com.google.dagger:dagger-compiler:2.0.1'
 }
 
 def javaVersion = JavaVersion.VERSION_1_7
@@ -67,7 +73,11 @@ android {
             }
         }
     }
-
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
     defaultConfig {
         applicationId "cn.jrhliveapplication"
         minSdkVersion 21

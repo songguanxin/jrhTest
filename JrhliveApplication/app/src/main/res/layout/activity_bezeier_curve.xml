@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cn.jrhlive.widget.bezeiercurve.BezeierCurveActivity">
+
+
+    <cn.jrhlive.widget.bezeiercurve.BezeierView
+        android:background="#cecece"
+        android:id="@+id/bv"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/sb_anchor1_x"
+        android:layout_margin="10dp"
+        android:layout_width="395dp"
+        android:layout_height="0dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp"/>
+
+    <SeekBar
+        android:id="@+id/sb_anchor2_y"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/tv_anchor2_y"/>
+
+    <TextView
+        android:layout_margin="10dp"
+        android:id="@+id/tv_anchor2_y"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="锚点2_y"
+        android:gravity="center"
+        app:layout_constraintLeft_toRightOf="@+id/sb_anchor2_y"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <SeekBar
+        android:id="@+id/sb_anchor2_x"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_anchor2_y"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/tv_anchor2_x"/>
+    <TextView
+        android:id="@+id/tv_anchor2_x"
+        android:text="锚点2_x"
+        android:layout_margin="10dp"
+        app:layout_constraintLeft_toRightOf="@+id/sb_anchor2_x"
+        app:layout_constraintBottom_toTopOf="@+id/tv_anchor2_y"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+    <SeekBar
+        android:id="@+id/sb_anchor1_y"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_anchor2_x"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/tv_anchor2_y"/>
+
+    <TextView
+        android:layout_margin="10dp"
+        android:id="@+id/tv_anchor1_y"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="锚点1_y"
+        android:gravity="center"
+        app:layout_constraintLeft_toRightOf="@+id/sb_anchor2_y"
+        app:layout_constraintBottom_toTopOf="@+id/tv_anchor2_x"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <SeekBar
+        android:id="@+id/sb_anchor1_x"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_anchor1_y"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/tv_anchor2_x"/>
+    <TextView
+        android:id="@+id/tv_anchor1_x"
+        android:text="锚点1_x"
+        android:layout_margin="10dp"
+        app:layout_constraintLeft_toRightOf="@+id/sb_anchor2_x"
+        app:layout_constraintBottom_toTopOf="@+id/tv_anchor1_y"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</android.support.constraint.ConstraintLayout>

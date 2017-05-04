@@ -1,16 +1,15 @@
 package cn.jrhlive.ani;
 
-import android.app.ActivityOptions;
-import android.content.Intent;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.util.Pair;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.rebound.Spring;
+import com.facebook.rebound.SpringListener;
+import com.facebook.rebound.SpringSystem;
 import com.jrhlibrary.utils.ActivityUtils;
 
 import java.util.ArrayList;
@@ -49,6 +48,10 @@ public class AnimationActivity extends BaseActivity {
     Button btnHeart;
     @BindView(R.id.sv_search)
     EditText svSearch;
+    @BindView(R.id.btn_spring)
+    Button btnSpring;
+    @BindView(R.id.btn_behavior)
+    Button btnBehavior;
 
     @Override
     protected void initEvent() {
@@ -57,12 +60,12 @@ public class AnimationActivity extends BaseActivity {
         AnimationUtils.setReenterWindowAni(this);
 
 
-
     }
 
     @OnClick(R.id.sv_search)
     public void goSearch() {
-        ActivityUtils.startActivity(this,SearchBarActivity.class);
+
+        ActivityUtils.startActivity(this, SearchBarActivity.class);
     }
 
     @Override
@@ -88,6 +91,34 @@ public class AnimationActivity extends BaseActivity {
 
     @OnClick(R.id.btn_go)
     public void onGoClick() {
+        SpringSystem springSystem = SpringSystem.create();
+
+        Spring spring = springSystem.createSpring();
+
+        spring.addListener(new SpringListener() {
+            @Override
+            public void onSpringUpdate(Spring spring) {
+                float value = (float) spring.getCurrentValue();
+                btnGo.setScaleX(value);
+                btnGo.setScaleY(value);
+            }
+
+            @Override
+            public void onSpringAtRest(Spring spring) {
+
+            }
+
+            @Override
+            public void onSpringActivate(Spring spring) {
+
+            }
+
+            @Override
+            public void onSpringEndStateChange(Spring spring) {
+
+            }
+        });
+        spring.setEndValue(1f);
 
 
 //        TransitionManager.beginDelayedTransition(layRoot, new Explode());
@@ -96,9 +127,9 @@ public class AnimationActivity extends BaseActivity {
 //        }
 //        ActivityUtils.startActivity(this, AniAActivity.class);
 
-        Intent intent = new Intent(this, AniAActivity.class);
-        ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(this, new Pair<View, String>(circle, circle.getTransitionName()));
-        startActivity(intent, activityOptions.toBundle());
+//        Intent intent = new Intent(this, AniAActivity.class);
+//        ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(this, new Pair<View, String>(circle, circle.getTransitionName()));
+//        startActivity(intent, activityOptions.toBundle());
 
     }
 
@@ -108,4 +139,17 @@ public class AnimationActivity extends BaseActivity {
         ActivityUtils.startActivity(this, HeartAniActivity.class);
     }
 
+
+    @OnClick(R.id.btn_spring)
+    public void onViewClicked() {
+
+        ActivityUtils.startActivity(this, SpringAniActivity.class);
+    }
+
+
+
+    @OnClick(R.id.btn_behavior)
+    public void onBehaviorClicked() {
+        ActivityUtils.startActivity(this,FllowBehaviorActivity.class);
+    }
 }

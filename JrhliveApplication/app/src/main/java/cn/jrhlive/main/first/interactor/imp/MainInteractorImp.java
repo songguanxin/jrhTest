@@ -27,7 +27,19 @@ public class MainInteractorImp implements MainInteractor {
             new MainItem("KenBurnsView",10),
             new MainItem("ConstraintLayout",11),
             new MainItem("BallAniDownUp",12),
-            new MainItem("testActivity",13)
+            new MainItem("testActivity",13),
+            new MainItem("qiNiuPlayer",14),
+            new MainItem("quPaiTest",15),
+            new MainItem("NestScrollingTest",16),
+            new MainItem("navigation_bottom_bar",17),
+            new MainItem("RichEditText",18),
+            new MainItem("ImageCrop",19),
+            new MainItem("tablelayout",20),
+            new MainItem("multiItemRecycleView",21),
+            new MainItem("BeizerView",22)
+
+
+
 
     );
 
