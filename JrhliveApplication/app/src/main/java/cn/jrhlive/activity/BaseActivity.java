@@ -13,6 +13,7 @@ import com.jrhlibrary.widgets.LoadingDialog;
 import butterknife.ButterKnife;
 import cn.jrhlive.R;
 import cn.jrhlive.basemvp.BaseView;
+import cn.jrhlive.common.BaseFragment;
 import cn.jrhlive.utils.ToastUtil;
 import cn.jrhlive.widget.swip.SwipeBackBaseActivity;
 import cn.jrhlive.widget.toolbar.ToolBarHelper;
@@ -140,5 +141,13 @@ public abstract class BaseActivity extends SwipeBackBaseActivity implements Base
         builder.setPositiveButton(positiveText, onPositiveButtonClickListener);
         builder.setNegativeButton(negativeText, onNegativeButtonClickListener);
         mAlertDialog = builder.show();
+    }
+
+
+    protected void loadFrgment(int layoutId, BaseFragment fragment) {
+        android.support.v4.app.FragmentManager supportFragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
+        fragmentTransaction.add(layoutId, fragment);
+        fragmentTransaction.commit();
     }
 }

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/container_video"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/btn_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="播放"
+        app:layout_constraintBottom_toBottomOf="@+id/container_thumb"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/container_thumb"
+        app:layout_constraintTop_toTopOf="@+id/container_thumb"/>
+
+    <cn.jrhlive.meishe.ui.widget.NoFlingScrollView
+
+        android:layout_marginTop="15dp"
+        android:id="@+id/container_thumb"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:scrollbars="none"
+        app:layout_constraintLeft_toRightOf="@+id/btn_play"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/container_video"
+        >
+
+        <LinearLayout
+            android:id="@+id/thumb_container_lay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+
+    </cn.jrhlive.meishe.ui.widget.NoFlingScrollView>
+
+    <View
+        android:id="@+id/cursor_line"
+        app:layout_constraintLeft_toLeftOf="@+id/container_thumb"
+        app:layout_constraintRight_toRightOf="@+id/container_thumb"
+        app:layout_constraintTop_toTopOf="@+id/container_thumb"
+        app:layout_constraintBottom_toBottomOf="@+id/container_thumb"
+        android:layout_height="0dp"
+        android:layout_width="2dp"
+        android:background="#0f0"/>
+
+    <LinearLayout
+        android:id="@+id/bottom_edit_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <Button
+            android:id="@+id/btn_left"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="left"/>
+
+        <Button
+            android:id="@+id/btn_add"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="add"/>
+
+        <Button
+            android:id="@+id/btn_right"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="right"/>
+
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

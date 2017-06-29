@@ -1,1 +1,1 @@
-include ':app', ':jrhlibrary'
+include ':app', ':jrhlibrary',":Matisse"

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#f8f8f8" >
+
+    <ImageView
+        android:id="@+id/btn_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:padding="15dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="@dimen/dialog_text_margin"
+        android:layout_marginRight="@dimen/dialog_text_margin"
+        android:layout_marginTop="@dimen/dialog_text_margin"
+        android:textColor="#333333"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_title"
+        android:layout_marginLeft="@dimen/dialog_text_margin"
+        android:layout_marginRight="@dimen/dialog_text_margin"
+        android:textColor="#666666"
+        android:textSize="16sp" />
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/tv_message"
+        android:layout_marginTop="@dimen/dialog_text_margin_min"
+        android:background="#b6b6b6" />
+
+    <LinearLayout
+        android:id="@+id/ll_two_button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialog_bottom_btn_height"
+        android:layout_below="@id/line1" >
+
+        <TextView
+            android:id="@+id/btn1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+
+        <View
+            android:id="@+id/line2"
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#b6b6b6" />
+
+        <TextView
+            android:id="@+id/btn2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/btn_single_button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialog_bottom_btn_height"
+        android:layout_below="@id/line1"
+
+        android:gravity="center"
+        android:text="知道了"
+        android:textColor="#666666"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+</RelativeLayout>

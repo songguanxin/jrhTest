@@ -20,6 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import cn.jrhlive.R;
 import cn.jrhlive.activity.BaseActivity;
+import cn.jrhlive.activity.CutActivity;
 import cn.jrhlive.activity.ScrollActivity;
 import cn.jrhlive.ani.AnimationActivity;
 import cn.jrhlive.ani.BallDownUpActivity;
@@ -34,6 +35,7 @@ import cn.jrhlive.main.first.presenter.imp.MainPresenterImp;
 import cn.jrhlive.main.first.view.MainView;
 import cn.jrhlive.main.second.imp.SMainInteractorImp;
 import cn.jrhlive.main.second.imp.SMainPresenterImp;
+import cn.jrhlive.meishe.MeisheActivity;
 import cn.jrhlive.nestscrolling.NestScrollActivity;
 import cn.jrhlive.qiniuplayer.activity.PlayerMainActivity;
 import cn.jrhlive.qupai.QupaiActivity;
@@ -187,6 +189,12 @@ public class MainActivity extends BaseActivity implements MainView {
                         break;
                     case 22:
                         ActivityUtils.startActivity(MainActivity.this,BezeierCurveActivity.class);
+                        break;
+                    case 23:
+                        ActivityUtils.startActivity(MainActivity.this,MeisheActivity.class);
+                        break;
+                    case 24:
+                        ActivityUtils.startActivity(MainActivity.this,CutActivity.class);
                         break;
                 }
             }

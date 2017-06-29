@@ -1,5 +1,6 @@
 package cn.jrhlive.main.first.interactor.imp;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,7 +37,10 @@ public class MainInteractorImp implements MainInteractor {
             new MainItem("ImageCrop",19),
             new MainItem("tablelayout",20),
             new MainItem("multiItemRecycleView",21),
-            new MainItem("BeizerView",22)
+            new MainItem("BeizerView",22),
+            new MainItem("MeiShe",23),
+            new MainItem("CutView",24),
+            new MainItem("temp",25)
 
 
 
@@ -44,7 +48,11 @@ public class MainInteractorImp implements MainInteractor {
     );
 
     public List<MainItem> getDatas(){
-        return datas;
+        List<MainItem> mainItems = new ArrayList<>();
+        for (MainItem data : datas) {
+           mainItems.add(0,data);
+        }
+        return mainItems;
     }
 
     @Override
@@ -58,6 +66,6 @@ public class MainInteractorImp implements MainInteractor {
 //
 //            }
 //        },2000);
-        callBack.onSuccess(datas);
+        callBack.onSuccess(getDatas());
     }
 }

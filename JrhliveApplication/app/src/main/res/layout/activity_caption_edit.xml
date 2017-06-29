@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#1c1e20"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   >
+
+    <com.meicam.sdk.NvsLiveWindow
+        android:id="@+id/live_window"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3"
+        android:layout_width="0dp"
+        android:layout_height="0dp">
+    </com.meicam.sdk.NvsLiveWindow>
+
+    <RelativeLayout
+        android:layout_marginTop="40dp"
+        android:id="@+id/time_lay"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/live_window">
+
+        <TextView
+            android:id="@+id/tv_now_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="00:00"
+            android:textColor="#a0a0a0"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/tv_total_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="00:00"
+            android:textColor="#a0a0a0"
+            android:textSize="12sp"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_pause_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:src="@drawable/caption_video_play"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time_lay"
+     />
+
+    <cn.jrhlive.meishe.ui.widget.NoFlingScrollView
+        android:id="@+id/scrollview_squence_view"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+        android:scrollbars="none"
+        android:fillViewport="true"
+        app:layout_constraintLeft_toRightOf="@+id/iv_pause_start"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time_lay">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/bottom_linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <FrameLayout
+                android:id="@+id/framelay_in_Bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </FrameLayout>
+        </LinearLayout>
+
+    </cn.jrhlive.meishe.ui.widget.NoFlingScrollView>
+
+    <View
+        android:id="@+id/view_cursor"
+        android:layout_width="2dp"
+        android:layout_height="0dp"
+        android:background="#ffffff"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollview_squence_view"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/scrollview_squence_view"/>
+
+    <TextView
+        android:id="@+id/tv_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:drawablePadding="8dp"
+        android:drawableTop="@drawable/add_caption_icon"
+        android:paddingTop="10dp"
+        android:text="点击添加字幕"
+        android:textColor="#a0a0a0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollview_squence_view"/>
+
+</android.support.constraint.ConstraintLayout>

@@ -1,5 +1,7 @@
 package daywork;
 
+import org.junit.Test;
+
 /**
  * desc:张立彬、贾瑞华和任涛 每人都有3辆车：一辆双门跑车、
  * 一辆四门轿车、一辆五门SUV。每个人以都分别有一辆别克、一辆现代、
@@ -31,4 +33,10 @@ public class Day38 {
      */
 
 
+    @Test
+    public void testChange(){
+        String aa = "aabbcc";
+        System.out.println(aa.replaceAll("bb",""));
+
+    }
 }

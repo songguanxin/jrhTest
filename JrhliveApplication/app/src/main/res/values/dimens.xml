@@ -41,4 +41,5 @@
     <dimen name="_34dp">34dp</dimen>
     <dimen name="_36dp">36dp</dimen>
     <dimen name="_40dp">40dp</dimen>
+    <dimen name="grid_expected_size">120dp</dimen>
 </resources>

@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.antfortune.freeline.FreelineCore;
 import com.facebook.stetho.Stetho;
+import com.jrhlibrary.utils.Mobile;
 
 /**
  * desc:
@@ -24,6 +25,8 @@ public class JrhApplication extends Application {
 //        JrhApplicationContext.application = this;
 //        JrhApplicationContext.context = this;
 //        QuPaiManagerUtil.init();
+
+        Mobile.init(getApplicationContext());
 
     }
     public JrhApplication getApplicationContext(){
