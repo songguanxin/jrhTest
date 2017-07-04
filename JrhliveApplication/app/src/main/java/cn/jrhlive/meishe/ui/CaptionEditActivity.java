@@ -1,10 +1,11 @@
 package cn.jrhlive.meishe.ui;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -32,6 +33,7 @@ import cn.jrhlive.meishe.presenter.ShortVideoManagePresenter;
 import cn.jrhlive.meishe.presenter.VideoPresenter;
 import cn.jrhlive.meishe.presenter.impl.ShortVideoManagePresenterImpl;
 import cn.jrhlive.meishe.ui.widget.CaptionAdjustLayout;
+import cn.jrhlive.meishe.ui.widget.CaptionSquenceGroupLayout;
 import cn.jrhlive.meishe.ui.widget.NoFlingScrollView;
 import cn.jrhlive.utils.ToastUtil;
 
@@ -54,15 +56,15 @@ public class CaptionEditActivity extends BaseActivity {
     @BindView(R.id.iv_pause_start)
     ImageView ivPauseStart;
     @BindView(R.id.bottom_linearLayout)
-    LinearLayout bottomLinearLayout;
+    CaptionSquenceGroupLayout bottomLinearLayout;
     @BindView(R.id.scrollview_squence_view)
     NoFlingScrollView scrollviewSquenceView;
     @BindView(R.id.view_cursor)
     View viewCursor;
     @BindView(R.id.tv_add)
     TextView tvAdd;
-    @BindView(R.id.framelay_in_Bottom)
-    FrameLayout framelayInBottom;
+
+    RelativeLayout framelayInBottom;
 
     private NvsStreamingContext mStreamingContext;
 
@@ -76,7 +78,7 @@ public class CaptionEditActivity extends BaseActivity {
     CaptionAdjustLayout captionAdjustLayout;
     List<String> mClipPaths;
 
-    int mRatio = 80;
+    float mRatio = 80f;
 
     int mScrollX;
     int mScrollY;
@@ -85,6 +87,8 @@ public class CaptionEditActivity extends BaseActivity {
 
     List<NvsTimelineCaption> mCaptions;
 
+    Bitmap ivLeft;
+    int ivWidth;
     @Override
     protected void initEvent() {
 
@@ -94,6 +98,7 @@ public class CaptionEditActivity extends BaseActivity {
             @Override
             public void onScrollChanged(NoFlingScrollView view, int l, int t, int oldl, int oldt) {
                 mLeftX = l;
+
             }
         });
 
@@ -129,7 +134,8 @@ public class CaptionEditActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-
+        ivLeft = BitmapFactory.decodeResource(getResources(), R.drawable.scoller);
+        ivWidth = ivLeft.getWidth();
         ParamShortVideo paramShortVideo = getIntent().getParcelableExtra(ParamShortVideo.PARAM_SHORT_VIDEO);
         mClipPaths = paramShortVideo.getmPaths();
 
@@ -163,15 +169,28 @@ public class CaptionEditActivity extends BaseActivity {
     private void initSquenceView() {
         int durationWidth = (int) (timeline.getDuration() / TIMEBASE * mRatio);
 
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(durationWidth, ViewGroup.LayoutParams.MATCH_PARENT);
-        linearLayoutSquence = new LinearLayout(this);
-        framelayInBottom.addView(linearLayoutSquence, params);
+        framelayInBottom = new RelativeLayout(this);
 
-
+        //前半段
         LinearLayout.LayoutParams paramsFront = new LinearLayout.LayoutParams(Mobile.SCREEN_WIDTH / 2 - scrollviewSquenceView.getLeft(), LinearLayout.LayoutParams.MATCH_PARENT);
         View frontSpace = new View(this);
         frontSpace.setBackgroundColor(Color.TRANSPARENT);
-        bottomLinearLayout.addView(frontSpace, 0, paramsFront);
+        bottomLinearLayout.addView(frontSpace,paramsFront);
+
+        //cursor后半段
+        LinearLayout.LayoutParams paramsEnd = new LinearLayout.LayoutParams(Mobile.SCREEN_WIDTH / 2, LinearLayout.LayoutParams.MATCH_PARENT);
+        View endSpace = new View(this);
+        endSpace.setBackgroundColor(Color.TRANSPARENT);
+        bottomLinearLayout.addView(endSpace, paramsEnd);
+
+        linearLayoutSquence = new LinearLayout(this);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams (durationWidth,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        params.setMargins(ivWidth,0,ivWidth,0);
+        framelayInBottom.addView(linearLayoutSquence, params);
+
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(durationWidth+2*ivWidth, ViewGroup.LayoutParams.MATCH_PARENT);
+        bottomLinearLayout.addView(framelayInBottom,layoutParams);
 
 
         for (int i = 0; i < mVideoTrack.getClipCount(); i++) {
@@ -182,22 +201,20 @@ public class CaptionEditActivity extends BaseActivity {
             LinearLayout.LayoutParams paramsSequence = new LinearLayout.LayoutParams(sequenceViewWidth, LinearLayout.LayoutParams.MATCH_PARENT);
             linearLayoutSquence.addView(view, paramsSequence);
         }
-        //cursor后半段
-        LinearLayout.LayoutParams paramsEnd = new LinearLayout.LayoutParams(Mobile.SCREEN_WIDTH / 2, LinearLayout.LayoutParams.MATCH_PARENT);
-        View endSpace = new View(this);
-        endSpace.setBackgroundColor(Color.TRANSPARENT);
-        bottomLinearLayout.addView(endSpace, paramsEnd);
+
 
         captionAdjustLayout = new CaptionAdjustLayout(this);
-        framelayInBottom.addView(captionAdjustLayout, params);
+        RelativeLayout.LayoutParams adjustParams = new RelativeLayout.LayoutParams (durationWidth+2*ivWidth,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        framelayInBottom.addView(captionAdjustLayout, adjustParams);
+        captionAdjustLayout.setScrollView(scrollviewSquenceView);
         captionAdjustLayout.setOnCaptionChangeListener(new CaptionAdjustLayout.onCaptionChangeListener() {
             @Override
-            public void onChangeCaptions(List<NvsTimelineCaption> captions) {
+            public void onChangeCaptions(List<NvsTimelineCaption> captions,float position) {
                 mCaptions.clear();
                 mCaptions.addAll(captions);
             }
         });
-
 
     }
 
@@ -263,7 +280,7 @@ public class CaptionEditActivity extends BaseActivity {
      * @return
      */
     public long getCurrentCaptionInTime() {
-        return (long) (mLeftX / mRatio * TIMEBASE);
+        return (long) ((float)mLeftX / mRatio * TIMEBASE);
     }
 
     /**

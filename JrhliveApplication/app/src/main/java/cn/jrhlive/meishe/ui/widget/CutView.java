@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,6 +21,7 @@ import cn.jrhlive.R;
 /**
  * desc: 视频裁剪view && 添加字幕
  *
+ * <p>
  * Created by jiarh on 17/5/24 13:44.
  */
 
@@ -51,22 +53,26 @@ public class CutView extends View {
      * 默认初始宽度
      */
     private float mDefaultWidth = mScreenWidth;
+    /**
+     * 最小宽度
+     */
+    private float minWidth = 30;
     private int mHeight;
 
     private OnTrimInChangeListener onTrimInChangeListener;
     private OnTrimOutChangeListener onTrimOutChangeListener;
+    private OnDragListener onDragListener;
 
 
     private RectF rectRight;
     private RectF rectLeft;
 
     private RectF midRect;
-
-    private boolean isDrawLeftRectAndRightRect = true;
-
     /**
      * 是否画两侧的阴影
      */
+    private boolean isDrawLeftRectAndRightRect = true;
+
     private boolean isDrawShadow;
     /**
      * 是否是编辑状态
@@ -118,20 +124,17 @@ public class CutView extends View {
     }
 
     private void drawIv(Canvas canvas) {
-        rectLeft = new RectF(initLeft + dxLeft, 0, initLeft + dxLeft + ivWidth, mHeight);
-        midRect = new RectF(initLeft + dxLeft + ivWidth, 0, initLeft + (mDefaultWidth - ivWidth) + dxRight, mHeight);
-        rectRight = new RectF(initLeft + (mDefaultWidth - ivWidth) + dxRight, 0, initLeft + mDefaultWidth + dxRight, mHeight);
-        if (isEditMode){
+        resetRects();
+        if (isEditMode) {
             drawLeftIv(canvas);
             drawLeftRect(canvas);
             drawMidRect(canvas, false);
             drawRightIv(canvas);
             drawRightRect(canvas);
-        }else {
+        } else {
             drawMidRect(canvas, true);
             return;
         }
-
 
 
     }
@@ -173,6 +176,11 @@ public class CutView extends View {
     private void drawMidRect(Canvas canvas, boolean isCover) {
 
         if (!isCover) {
+            //绘制拖动区域阴影
+            mPaint.setColor(ContextCompat.getColor(getContext(), R.color.fourty_percent_black));
+            mPaint.setStyle(Paint.Style.FILL);
+            canvas.drawRect(midRect, mPaint);
+
             if (isDrawShadow) {
                 mPaint.setStyle(Paint.Style.FILL);
                 mPaint.setColor(mColorCover);
@@ -182,14 +190,15 @@ public class CutView extends View {
                 mPaint.setStyle(Paint.Style.STROKE);
             }
             canvas.drawRect(midRect, mPaint);
+
         } else {
             mPaint.setStyle(Paint.Style.FILL);
             mPaint.setColor(mColor);
             mPaint.setStrokeWidth(10);
             canvas.drawLines(new float[]{midRect.left, midRect.top, midRect.left, midRect.bottom,
                     midRect.right, midRect.top, midRect.right, midRect.bottom}, mPaint);
-            mPaint.setColor(Color.parseColor("#FCA792"));
-            canvas.drawRect(midRect,mPaint);
+            mPaint.setColor(ContextCompat.getColor(getContext(), R.color.light_red));
+            canvas.drawRect(midRect, mPaint);
 
         }
 
@@ -209,7 +218,7 @@ public class CutView extends View {
             case MotionEvent.ACTION_DOWN:
 
 
-                if ((ev.getX() >= rectLeft.left && ev.getX() <= rectLeft.right) && ev.getY() < getHeight()) {
+                if (isEditMode && (ev.getX() >= rectLeft.left && ev.getX() <= rectLeft.right) && ev.getY() < getHeight()) {
 
                     getParent().requestDisallowInterceptTouchEvent(true);
                     //左边
@@ -217,7 +226,7 @@ public class CutView extends View {
                     isDragLeft = true;
 
                 }
-                if ((ev.getX() >= rectRight.left && ev.getX() <= rectRight.right) && ev.getY() < getHeight()) {
+                if (isEditMode && (ev.getX() >= rectRight.left && ev.getX() <= rectRight.right) && ev.getY() < getHeight()) {
 
                     getParent().requestDisallowInterceptTouchEvent(true);
                     //右边
@@ -231,48 +240,72 @@ public class CutView extends View {
                     float dx = ev.getRawX() - lastX;
                     dxLeft += dx;
 
-                    if (dxLeft + initLeft + ivWidth > rectRight.left) {
-                        dxLeft = (int) rectRight.left - initLeft - ivWidth;
-
-                    }
+                    //rectLeft.right > rectRight.left-miniWidth
 
                     if (dxLeft + initLeft < 0) {
                         dxLeft = 0 - initLeft;
                     }
-                    if (midRect.left < midRect.right)
+                    if (dxLeft + initLeft + ivWidth > rectRight.left-minWidth) {
+                        dxLeft = rectRight.left-minWidth - initLeft - ivWidth;
+
+                    }
+
+                    if (midRect.left < midRect.right){
+                        //对外传值要减去左侧预留ivWidth midRect.left-ivWidth
                         if (onTrimInChangeListener != null)
-                            onTrimInChangeListener.onChange((int) rectLeft.left);
+                            onTrimInChangeListener.onChange(initLeft + dxLeft);
+                    }
 
                 }
 
                 if (isDragRight) {
                     float dx = ev.getRawX() - lastX;
                     dxRight += dx;
-                    if (mDefaultWidth + initLeft + dxRight - ivWidth < rectLeft.right) {
-                        dxRight =  rectLeft.right - mDefaultWidth - initLeft + ivWidth;
+
+                    //控制右侧滑出边界
+                    if (initLeft + mDefaultWidth + dxRight + 2 * ivWidth > getWidth()) {
+                        dxRight = getWidth() - initLeft - mDefaultWidth - 2 * ivWidth;
                     }
 
-                    if (initLeft + mDefaultWidth + dxRight > getWidth()) {
-                        dxRight = getWidth() - initLeft - mDefaultWidth;
+                    //midRect.right<rectLeft.right+minWidth;
+
+                    if (mDefaultWidth + initLeft + dxRight + ivWidth < rectLeft.right+minWidth) {
+                        dxRight = rectLeft.right+minWidth - mDefaultWidth - initLeft - ivWidth;
                     }
+
+
                     if (onTrimOutChangeListener != null) {
-                        onTrimOutChangeListener.onChange((int) midRect.right);
+                        //对外传值要减去左侧预留ivWidth midRect.right-ivWidth
+                        onTrimOutChangeListener.onChange(initLeft + mDefaultWidth + dxRight);
                     }
                 }
-
                 invalidate();
-
                 lastX = (int) ev.getRawX();
-
                 break;
             case MotionEvent.ACTION_UP:
                 getParent().requestDisallowInterceptTouchEvent(false);
+                if (onDragListener!=null){
+                    if (isDragRight){
+                        onDragListener.dragover(midRect.right-ivWidth);
+                    }
+
+                    if (isDragLeft){
+                        onDragListener.dragover(midRect.left-ivWidth);
+                    }
+                }
                 isDragLeft = false;
                 isDragRight = false;
 
 
         }
         return true;
+    }
+
+    private void resetRects() {
+
+        rectLeft = new RectF(initLeft + dxLeft, 0, initLeft + dxLeft + ivWidth, mHeight);
+        midRect = new RectF(rectLeft.right, 0, initLeft + mDefaultWidth + dxRight + ivWidth, mHeight);
+        rectRight = new RectF(midRect.right, 0, midRect.right + ivWidth, mHeight);
     }
 
 
@@ -285,14 +318,26 @@ public class CutView extends View {
     }
 
 
+    /**
+     * 字幕入点回调
+     */
     public interface OnTrimInChangeListener {
-        public void onChange(int to);
+         void onChange(float to);
     }
 
+    /**
+     * 字幕出点回调
+     */
     public interface OnTrimOutChangeListener {
-        public void onChange(int to);
+         void onChange(float to);
     }
 
+    /**
+     * 实时位置回调
+     */
+    public interface  OnDragListener{
+        void dragover(float to);
+    }
     public int getmColor() {
         return mColor;
     }
@@ -315,6 +360,10 @@ public class CutView extends View {
 
     public void setDrawLeftRectAndRightRect(boolean drawLeftRectAndRightRect) {
         isDrawLeftRectAndRightRect = drawLeftRectAndRightRect;
+    }
+
+    public void setOnDragListener(OnDragListener onDragListener) {
+        this.onDragListener = onDragListener;
     }
 
     public float getDxLeft() {

@@ -20,7 +20,7 @@ public class NoFlingScrollView extends HorizontalScrollView {
     private NoFlingScrollView currentView;
 
 
-    private int currentX =Integer.MIN_VALUE;
+    private int currentX = Integer.MIN_VALUE;
 
     /**
      * 滚动状态:
@@ -28,7 +28,7 @@ public class NoFlingScrollView extends HorizontalScrollView {
      * TOUCH_SCROLL=手指拖动滚动
      * FLING=滚动
      */
-   public enum ScrollType {
+    public enum ScrollType {
         IDLE,
         TOUCH_SCROLL,
         FLING
@@ -111,10 +111,10 @@ public class NoFlingScrollView extends HorizontalScrollView {
     private Runnable scrollRunnable = new Runnable() {
         @Override
         public void run() {
-            if (getScrollX()== currentX) {
+            if (getScrollX() == currentX) {
                 //滚动停止,取消监听线程
                 scrollType = ScrollType.IDLE;
-                if (mScrollTypeListenter!=null) {
+                if (mScrollTypeListenter != null) {
                     mScrollTypeListenter.onScrollChanged(scrollType);
                 }
                 mHandler.removeCallbacks(this);
@@ -122,7 +122,7 @@ public class NoFlingScrollView extends HorizontalScrollView {
             } else {
                 //手指离开屏幕,但是view还在滚动
                 scrollType = ScrollType.FLING;
-                if(mScrollTypeListenter!=null){
+                if (mScrollTypeListenter != null) {
                     mScrollTypeListenter.onScrollChanged(scrollType);
                 }
             }

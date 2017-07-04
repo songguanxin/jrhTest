@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 
 import com.meicam.sdk.NvsTimelineCaption;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * desc: 字幕调解
+ * desc: 多字幕调解，增加，删除
  * Created by jiarh on 17/6/29 13:54.
  */
 
@@ -29,10 +30,11 @@ public class CaptionAdjustLayout extends FrameLayout {
     private NvsTimelineCaption mCurrentCaption;
     private List<NvsTimelineCaption> captions;
 
-    private int mRatio = 80;
+    private float mRatio = 80f;
     private float TIMEBASE = 1000000f;
 
     onCaptionChangeListener onCaptionChangeListener;
+    private HorizontalScrollView scrollView;
 
 
     public CaptionAdjustLayout(Context context) {
@@ -86,20 +88,27 @@ public class CaptionAdjustLayout extends FrameLayout {
             cutView.invalidate();
             cutView.setOnChangeListener(new CutView.OnTrimInChangeListener() {
                 @Override
-                public void onChange(int to) {
-
+                public void onChange(float to) {
                     caption.changeInPoint((long) (to / mRatio * TIMEBASE));
                     if (onCaptionChangeListener != null) {
-                        onCaptionChangeListener.onChangeCaptions(captions);
+                        onCaptionChangeListener.onChangeCaptions(captions,to);
                     }
                 }
             });
             cutView.setOnChangeListener(new CutView.OnTrimOutChangeListener() {
                 @Override
-                public void onChange(int to) {
+                public void onChange(float to) {
                     caption.changeOutPoint((long) (to / mRatio * TIMEBASE));
                     if (onCaptionChangeListener != null) {
-                        onCaptionChangeListener.onChangeCaptions(captions);
+                        onCaptionChangeListener.onChangeCaptions(captions,to);
+                    }
+                }
+            });
+            cutView.setOnDragListener(new CutView.OnDragListener() {
+                @Override
+                public void dragover(float to) {
+                    if (scrollView!=null){
+                        scrollView.smoothScrollTo((int)to,0);
                     }
                 }
             });
@@ -184,11 +193,15 @@ public class CaptionAdjustLayout extends FrameLayout {
 
     }
 
+    public void setScrollView(HorizontalScrollView scrollView) {
+        this.scrollView = scrollView;
+    }
+
     public void setOnCaptionChangeListener(CaptionAdjustLayout.onCaptionChangeListener onCaptionChangeListener) {
         this.onCaptionChangeListener = onCaptionChangeListener;
     }
 
     public interface onCaptionChangeListener {
-        void onChangeCaptions(List<NvsTimelineCaption> captions);
+        void onChangeCaptions(List<NvsTimelineCaption> captions,float currentPosition);
     }
 }

@@ -42,6 +42,7 @@ public class CutActivity extends BaseActivity {
         framelayoutInSc.setLayoutParams(params);
 
         final CutView cutView = new CutView(this);
+        cutView.setEditMode(true);
         cutView.invalidate();
 
         framelayoutInSc.addView(cutView, params);
@@ -73,13 +74,13 @@ public class CutActivity extends BaseActivity {
 
                 switch (scrollType){
                     case TOUCH_SCROLL:
-                        cutView.setEditMode(true);
+                        cutView.setEditMode(false);
                         break;
                     case FLING:
-                        cutView.setEditMode(true);
+                        cutView.setEditMode(false);
                         break;
                     case IDLE:
-                        cutView.setEditMode(false);
+                        cutView.setEditMode(true);
                         break;
                 }
 
