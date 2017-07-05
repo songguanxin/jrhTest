@@ -10,8 +10,6 @@ import butterknife.BindView;
 import cn.jrhlive.R;
 import cn.jrhlive.meishe.ui.widget.CutView;
 import cn.jrhlive.meishe.ui.widget.NoFlingScrollView;
-import cn.jrhlive.meishe.widget.DrawRect;
-import cn.jrhlive.utils.ToastUtil;
 
 public class CutActivity extends BaseActivity {
 
@@ -51,14 +49,14 @@ public class CutActivity extends BaseActivity {
         frameContainer.post(new Runnable() {
             @Override
             public void run() {
-                DrawRect drawRect = new DrawRect(CutActivity.this, frameContainer.getWidth() / 2, frameContainer.getHeight() / 2, frameContainer.getWidth() / 2 + 100, frameContainer.getHeight() / 2 + 50);
-                frameContainer.addView(drawRect);
-                drawRect.setOnDeleteClickListener(new DrawRect.OnDeleteClickListener() {
-                    @Override
-                    public void onDeleteClicked() {
-                        ToastUtil.showMessage("delete");
-                    }
-                });
+//                DrawRect drawRect = new DrawRect(CutActivity.this,  frameContainer.getWidth() / 2 , frameContainer.getHeight() / 2,1);
+//                frameContainer.addView(drawRect);
+//                drawRect.setOnDeleteClickListener(new DrawRect.OnDeleteClickListener() {
+//                    @Override
+//                    public void onDeleteClicked() {
+//                        ToastUtil.showMessage("delete");
+//                    }
+//                });
             }
         });
 
