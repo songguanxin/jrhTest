@@ -24,6 +24,7 @@ import cn.jrhlive.activity.CutActivity;
 import cn.jrhlive.activity.ScrollActivity;
 import cn.jrhlive.ani.AnimationActivity;
 import cn.jrhlive.ani.BallDownUpActivity;
+import cn.jrhlive.ani.BoundAniActivity;
 import cn.jrhlive.bottomnavigationbar.BottomNavigationBarActivity;
 import cn.jrhlive.constraintLayout.ConstraintLayoutActivity;
 import cn.jrhlive.eventbus.MainEventBusActivity;
@@ -195,6 +196,9 @@ public class MainActivity extends BaseActivity implements MainView {
                         break;
                     case 24:
                         ActivityUtils.startActivity(MainActivity.this,CutActivity.class);
+                        break;
+                    case 25:
+                        ActivityUtils.startActivity(MainActivity.this,BoundAniActivity.class);
                         break;
                 }
             }

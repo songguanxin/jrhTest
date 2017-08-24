@@ -40,7 +40,10 @@ public class MainInteractorImp implements MainInteractor {
             new MainItem("BeizerView",22),
             new MainItem("MeiShe",23),
             new MainItem("CutView",24),
-            new MainItem("temp",25)
+            new MainItem("BoundAniActivity",25),
+            new MainItem("temp",26)
+
+
 
 
 

@@ -74,6 +74,7 @@ public class DrawRect extends View {
     private int viewMode = 0;
 
     float lastX = 0, lastY = 0;
+    private int ivWidth;
 
     OnDeleteClickListener onDeleteClickListener;
     OnScaleDragListener onScaleDragListener;
@@ -98,20 +99,25 @@ public class DrawRect extends View {
         mPaint.setStrokeWidth(5);
         // 设置非填充
         mPaint.setStyle(Paint.Style.STROKE);
+
         rect = new RectF(l, t, r, b);
         minDis = Math.min(minDis, r - l);
         beforeDis = Math.sqrt(Math.hypot(r - l, b - t));
         deleteBp = BitmapFactory.decodeResource(getResources(), R.drawable.caption_delete_icon);
         scaleBp = BitmapFactory.decodeResource(getResources(), R.drawable.scale_caption);
 
+        ivWidth = scaleBp.getWidth();
 
     }
 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawRect(rect, mPaint);
-        drawDelete(canvas);
-        drawScale(canvas);
+        if (rect.right < liveWindowWidth) {
+            canvas.drawRect(rect, mPaint);
+            drawDelete(canvas);
+            drawScale(canvas);
+        }
+
     }
 
     private void drawScale(Canvas canvas) {
@@ -179,12 +185,19 @@ public class DrawRect extends View {
         double r = rect.right + scaleDx / 2;
         double t = rect.top - scaleDy / 2;
         double b = rect.bottom + scaleDy / 2;
+
+        if (r > liveWindowWidth - ivWidth) {
+            isClickScale = false;
+
+            return;
+        }
         currentDis = Math.sqrt(Math.hypot(r - l, b - t));
         if (isNotAllowDrag()) {
+            isClickScale = false;
             return;
         }
         if (r - l < minDis || b - t < minDis) {
-            Log.e(TAG, "calculateRect: "+(r-l));
+            Log.e(TAG, "calculateRect: " + (r - l));
             return;
         }
         rect.set((float) l, (float) t, (float) r, (float) b);
@@ -192,9 +205,8 @@ public class DrawRect extends View {
     }
 
 
-    private boolean isNotAllowDrag()
-    {
-        Log.e(TAG, "isNotAllowDrag: "+currentDis / beforeDis);
+    private boolean isNotAllowDrag() {
+        Log.e(TAG, "isNotAllowDrag: " + currentDis / beforeDis);
         return currentDis / beforeDis > maxRadio;
     }
 
@@ -247,7 +259,7 @@ public class DrawRect extends View {
         if (left < 0) {
             newX = (int) lastX;
         }
-        if (right > liveWindowWidth) {
+        if (right > liveWindowWidth - ivWidth) {
 
             newX = (int) lastX;
         }
@@ -257,6 +269,8 @@ public class DrawRect extends View {
         if (bottom > liveWidowHeight) {
             newY = (int) lastY;
         }
+
+
         rect.set(left, top, right, bottom);
         if (viewMode == captionMode && onCaptionMoveListener != null)
             onCaptionMoveListener.onCaptionMove(newX, newY, lastX, lastY);

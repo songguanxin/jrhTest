@@ -136,6 +136,8 @@
         </activity>
         <activity android:name=".activity.CutActivity">
         </activity>
+        <activity android:name=".ani.BoundAniActivity">
+        </activity>
     </application>
 
 </manifest>
