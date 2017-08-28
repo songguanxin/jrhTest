@@ -29,6 +29,7 @@ public abstract class BaseActivity extends SwipeBackBaseActivity implements Base
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(getViewId());
         ButterKnife.bind(this);
         initViewData();

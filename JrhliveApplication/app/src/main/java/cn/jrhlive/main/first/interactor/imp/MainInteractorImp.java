@@ -41,7 +41,8 @@ public class MainInteractorImp implements MainInteractor {
             new MainItem("MeiShe",23),
             new MainItem("CutView",24),
             new MainItem("BoundAniActivity",25),
-            new MainItem("temp",26)
+            new MainItem("RichEditor",26),
+            new MainItem("temp",27)
 
 
 

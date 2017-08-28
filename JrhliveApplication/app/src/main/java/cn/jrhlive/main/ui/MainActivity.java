@@ -42,6 +42,7 @@ import cn.jrhlive.qiniuplayer.activity.PlayerMainActivity;
 import cn.jrhlive.qupai.QupaiActivity;
 import cn.jrhlive.recycleview.MultiItemRecycleViewActivity;
 import cn.jrhlive.retrofit.RetrofitActivity;
+import cn.jrhlive.richeditor.ui.RichEditorActivity;
 import cn.jrhlive.ritchtext.RitchTextActivity;
 import cn.jrhlive.rxandroid.MainRxAndroidActivity;
 import cn.jrhlive.surfaceview.SurfaceViewActivity;
@@ -199,6 +200,9 @@ public class MainActivity extends BaseActivity implements MainView {
                         break;
                     case 25:
                         ActivityUtils.startActivity(MainActivity.this,BoundAniActivity.class);
+                        break;
+                    case 26:
+                        ActivityUtils.startActivity(MainActivity.this,RichEditorActivity.class);
                         break;
                 }
             }
