@@ -134,7 +134,9 @@ RE.setItalic = function() {
 RE.setSubscript = function() {
     document.execCommand('subscript', false, null);
 }
-
+RE.setTextIndent=function(indent){
+   RE.editor.style.textIndent=indent+"em";
+}
 RE.setSuperscript = function() {
     document.execCommand('superscript', false, null);
 }
@@ -209,8 +211,19 @@ RE.setBlockquote = function(b) {
 
 //插入图片
 RE.insertImage = function(url, alt) {
-    var html = '<img  src="' + url + '" alt="' + alt + '" /><p align=center style="color:#aaaaaa">来自陌筹君App的图片</p><hr align=center width=200 color=#aaaaaa size=1 /><br/><br/>';
+    var html = '<img id="showImg" src="' + url + '" alt="' + alt + '" /><hr align=center width=200 color=#aaaaaa size=1 /><br/>';
     RE.insertHTML(html);
+}
+//插入视频
+RE.insertVideo=function(url){
+
+var html='<video class ="video_container" src="'+url+'" controls="controls"></video>';
+RE.insertHTML(html);
+}
+//插入音频
+RE.insertAudio=function(url,content){
+var html='<audio src="'+url+'" controls="controls"></audio><p align=center style="color:#aaaaaa">'+content+'</p>';
+RE.insertHTML(html);
 }
 
 //插入分割线
@@ -218,10 +231,19 @@ RE.insertHr = function() {
     var html = '<hr color=#e2e2e2 size=1 /><br/>';
     RE.insertHTML(html);
 }
+//插换行
+RE.insertBr = function() {
+    var html = '<br/>';
+    RE.insertHTML(html);
+}
 
 RE.insertHTML = function(html) {
     RE.restorerange();
     document.execCommand('insertHTML', false, html);
+}
+
+RE.getContentLength=function (){
+window.android.setContentLength(parseInt(RE.editor.innerText.length));
 }
 
 RE.insertLink = function(url, title) {
@@ -361,3 +383,52 @@ RE.editor.addEventListener("keyup", function(e) {
    }
 });
 RE.editor.addEventListener("click", RE.enabledEditingItems);
+
+RE.getBlob = function(view){
+return view.Blob;
+}
+
+RE.createHtmlDoc = function(html) {
+		var dt = doc_impl.createDocumentType('html', null, null)
+			, doc = doc_impl.createDocument("http://www.w3.org/1999/xhtml", "html", dt)
+			, doc_el = doc.documentElement
+			, head = doc_el.appendChild(doc.createElement("head"))
+			, charset_meta = head.appendChild(doc.createElement("meta"))
+			, title = head.appendChild(doc.createElement("title"))
+			, body = doc_el.appendChild(doc.createElement("body"))
+			, i = 0
+			, len = html.childNodes.length
+		;
+		charset_meta.setAttribute("charset", html.ownerDocument.characterSet);
+		for (; i < len; i++) {
+			body.appendChild(doc.importNode(html.childNodes.item(i), true));
+		}
+		var title_text = guess_title(doc);
+		if (title_text) {
+			title.appendChild(doc.createTextNode(title_text));
+		}
+		return doc;
+	}
+
+RE.save = function(view){
+
+var BB = RE.getBlob(view) ;
+var xml_serializer = new XMLSerializer();
+var doc = create_html_doc(RE.getHtml());
+	saveAs(new BB([xml_serializer.serializeToString(doc)]
+	,{type: "text/plain;charset=" + document.characterSet})
+	,(html_filename.value || html_filename.placeholder) + ".xhtml"
+	);
+
+}
+
+RE.saveTest=function(path){
+var FileSaver = require('file-saver');
+var blob = new Blob([RE.getHtml()], {type: "text/plain;charset=utf-8"});
+FileSaver.saveAs(blob, path);
+//
+//var blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
+//saveAs(blob, path);
+
+}
+

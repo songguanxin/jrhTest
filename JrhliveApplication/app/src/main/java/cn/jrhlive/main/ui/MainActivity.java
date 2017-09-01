@@ -50,6 +50,7 @@ import cn.jrhlive.svg.SvgActivity;
 import cn.jrhlive.test.NavigationActivity;
 import cn.jrhlive.test.TableActivity;
 import cn.jrhlive.test.TestActivity;
+import cn.jrhlive.toast.ToastActivity;
 import cn.jrhlive.utils.ToastUtil;
 import cn.jrhlive.widget.bezeiercurve.BezeierCurveActivity;
 
@@ -203,6 +204,9 @@ public class MainActivity extends BaseActivity implements MainView {
                         break;
                     case 26:
                         ActivityUtils.startActivity(MainActivity.this,RichEditorActivity.class);
+                        break;
+                    case 27:
+                        ActivityUtils.startActivity(MainActivity.this,ToastActivity.class);
                         break;
                 }
             }

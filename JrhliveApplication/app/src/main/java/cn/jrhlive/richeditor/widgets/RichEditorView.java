@@ -7,6 +7,8 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -39,6 +41,7 @@ public class RichEditorView extends WebView {
     AfterInitialLoadListener mLoadListener;
     private OnTextChangeListener mTextChangeListener;
     private OnDecorationStateListener mDecorationStateListener;
+    private int contentLength;
 
 
     public RichEditorView(Context context) {
@@ -54,10 +57,14 @@ public class RichEditorView extends WebView {
         super(context, attrs, defStyleAttr);
         setVerticalScrollBarEnabled(false);
         setHorizontalScrollBarEnabled(false);
+        getSettings().setAllowFileAccess(true);
         getSettings().setJavaScriptEnabled(true);
         setWebChromeClient(new WebChromeClient());
+
         setWebViewClient(createWebviewClient());
         loadUrl(SETUP_HTML);
+        addJavascriptInterface(this, "android");
+//        evaluateJavaScript(this);
         applyAttributes(context, attrs);
     }
 
@@ -210,6 +217,10 @@ public class RichEditorView extends WebView {
         exec("javascript:RE.prepareInsert();");
         exec("javascript:RE.insertLink('" + href + "', '" + title + "');");
     }
+    public void insertBr() {
+        exec("javascript:RE.prepareInsert();");
+        exec("javascript:RE.insertBr();");
+    }
 
     public void setTextColor(int color) {
         exec("javascript:RE.prepareInsert();");
@@ -226,6 +237,49 @@ public class RichEditorView extends WebView {
         exec("javascript:RE.setTextBackgroundColor('" + hex + "');");
     }
 
+    public void insertImage(String url, String alt) {
+        exec("javascript:RE.prepareInsert();");
+        exec("javascript:RE.insertImage('" + url + "', '" + alt + "');");
+    }
+    public void insertVideo(String url) {
+        exec("javascript:RE.prepareInsert();");
+        exec("javascript:RE.insertVideo('" + url + "');");
+    }
+    public void insertAudio(String url,String desc) {
+        exec("javascript:RE.prepareInsert();");
+        exec("javascript:RE.insertAudio('" + url + "','"+desc+"');");
+    }
+
+    public void saveTest(String path){
+        exec("javascript:RE.saveTest('"+path+"');");
+
+    }
+
+    public void setSubscript() {
+        exec("javascript:RE.setSubscript();");
+    }
+
+    public void setSuperscript() {
+        exec("javascript:RE.setSuperscript();");
+    }
+    public void setIndent() {
+        exec("javascript:RE.setIndent();");
+    }
+
+    public void setOutdent() {
+        exec("javascript:RE.setOutdent();");
+    }
+
+    public void setTextIndent(int em){
+        exec("javascript:RE.setTextIndent("+em+");");
+    }
+
+    public void setBullets(){
+        exec("javascript:RE.setBullets();");
+    }
+    public void setNumbers(){
+        exec("javascript:RE.setNumbers();");
+    }
     public void setAlignLeft() {
         exec("javascript:RE.setJustifyLeft();");
     }
@@ -282,6 +336,14 @@ public class RichEditorView extends WebView {
             return super.shouldOverrideUrlLoading(view, url);
         }
     }
+    private void evaluateJavaScript(WebView webView){
+        webView.evaluateJavascript("getContentLength()", new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String s) {
+                setContentLength(Integer.parseInt(s));
+            }
+        });
+    }
 
     public void setmLoadListener(AfterInitialLoadListener mLoadListener) {
         this.mLoadListener = mLoadListener;
@@ -293,5 +355,19 @@ public class RichEditorView extends WebView {
 
     public void setmDecorationStateListener(OnDecorationStateListener mDecorationStateListener) {
         this.mDecorationStateListener = mDecorationStateListener;
+    }
+
+    public void updateContentLength(){
+        exec("javascript:RE.getContentLength();");
+    }
+
+    @JavascriptInterface
+    public void setContentLength(int contentLength) {
+        this.contentLength = contentLength;
+    }
+
+    public int getContentLength() {
+
+        return contentLength;
     }
 }

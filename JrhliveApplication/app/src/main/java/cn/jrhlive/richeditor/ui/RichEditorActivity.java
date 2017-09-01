@@ -1,6 +1,10 @@
 package cn.jrhlive.richeditor.ui;
 
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.annotation.ColorInt;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -10,13 +14,30 @@ import android.widget.TextView;
 
 import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
+import com.jrhlibrary.utils.PermissionUtil;
+import com.jrhlibrary.utils.UriToPathUtil;
+import com.vincent.filepicker.Constant;
+import com.vincent.filepicker.activity.AudioPickActivity;
+import com.vincent.filepicker.filter.entity.AudioFile;
+import com.zhihu.matisse.Matisse;
+import com.zhihu.matisse.MimeType;
+import com.zhihu.matisse.engine.impl.GlideEngine;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.jrhlive.R;
 import cn.jrhlive.activity.BaseActivity;
 import cn.jrhlive.richeditor.widgets.RichEditorView;
+import cn.jrhlive.richeditor.widgets.listener.OnTextChangeListener;
 import cn.jrhlive.utils.ToastUtil;
+
+import static cn.jrhlive.constants.Constant.CAMERA_PERMISSIONS;
+import static cn.jrhlive.meishe.MeisheActivity.REQUEST_CODE_CHOOSE;
+import static com.vincent.filepicker.activity.AudioPickActivity.IS_NEED_RECORDER;
 
 public class RichEditorActivity extends BaseActivity implements ColorPickerDialogListener {
 
@@ -77,22 +98,74 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
     TextView tvLetterSpace;
     @BindView(R.id.tv_row_space)
     TextView tvRowSpace;
+    @BindView(R.id.tv_sub)
+    TextView tvSub;
+    @BindView(R.id.tv_sup)
+    TextView tvSup;
+    @BindView(R.id.tv_sort)
+    TextView tvSort;
+    @BindView(R.id.tv_un_sort)
+    TextView tvUnSort;
+    @BindView(R.id.tv_p_w_retract)
+    TextView tvPWRetract;
+    @BindView(R.id.tv_p_w_retract_back)
+    TextView tvPWRetractBack;
+    @BindView(R.id.tv_p_row_retract)
+    TextView tvPRowRetract;
+    @BindView(R.id.tv_p_space_before)
+    TextView tvPSpaceBefore;
+    @BindView(R.id.tv_p_space_after)
+    TextView tvPSpaceAfter;
+
 
     private static final int DIALOG_ID = 0;
     boolean isBlock;
     int fontSize = 1;
     boolean isFontColor;
     boolean isFontBg;
-    int letterSpace=5;
-
+    int letterSpace = 5;
+    boolean isTextIndent;
+    @BindView(R.id.tv_video)
+    TextView tvVideo;
+    @BindView(R.id.tv_pic)
+    TextView tvPic;
+    @BindView(R.id.tv_audio)
+    TextView tvAudio;
+    List<Uri> uris;
+    List<String> mPaths;
+    /**
+     * 1,2,3 图片，视频，音频
+     */
+    int type = 0;
+    File mFile;
+    @BindView(R.id.tv_save)
+    TextView tvSave;
+    @BindView(R.id.tv_recover)
+    TextView tvRecover;
 
     @Override
     protected void initEvent() {
 
+        initFiles();
+    }
+
+    private void initFiles() {
+        mFile = new File(Environment.getExternalStorageDirectory() + "/richEditor");
+        if (!mFile.exists()) {
+            mFile.mkdirs();
+        }
     }
 
     @Override
     protected void initView() {
+        richEditor.setmTextChangeListener(new OnTextChangeListener() {
+            @Override
+            public void onTextChange(String text) {
+//                richEditor.updateContentLength();
+                tvTitle.setText("字数：" + text.trim().length());
+
+            }
+        });
 
     }
 
@@ -106,9 +179,11 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
     @OnClick({R.id.iv_link, R.id.iv_bold, R.id.iv_insertmore, R.id.iv_italic,
             R.id.iv_strike, R.id.iv_underline, R.id.iv_quote, R.id.tv_h1,
             R.id.tv_h2, R.id.tv_h3, R.id.tv_h4, R.id.tv_h5, R.id.iv_photo,
-            R.id.iv_font, R.id.iv_add, R.id.iv_undo, R.id.iv_todo,
+            R.id.iv_font, R.id.iv_add, R.id.iv_undo, R.id.iv_todo,R.id.tv_save, R.id.tv_recover,
             R.id.tv_font_color, R.id.tv_font_bg, R.id.tv_left, R.id.tv_mid, R.id.tv_right,
-            R.id.tv_letter_space, R.id.tv_row_space
+            R.id.tv_letter_space, R.id.tv_row_space, R.id.tv_sub, R.id.tv_sup, R.id.tv_sort,
+            R.id.tv_un_sort, R.id.tv_p_w_retract, R.id.tv_p_w_retract_back,
+            R.id.tv_p_row_retract, R.id.tv_p_space_before, R.id.tv_p_space_after, R.id.tv_video, R.id.tv_pic, R.id.tv_audio
 
     })
     public void onViewClicked(View view) {
@@ -153,6 +228,8 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
                 richEditor.setHeading(5, true);
                 break;
             case R.id.iv_photo:
+                type = 1;
+                selectPicVideos(1);
                 break;
             case R.id.iv_font:
                 if (fontSize < 7) {
@@ -191,15 +268,71 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
                 break;
             case R.id.tv_letter_space:
                 richEditor.setLetterSpace(letterSpace++);
-                if (letterSpace>=20){
-                    letterSpace=1;
+                if (letterSpace >= 20) {
+                    letterSpace = 1;
                 }
                 break;
             case R.id.tv_row_space:
-                richEditor.setLineHeight(letterSpace+=10);
-                if (letterSpace>=100){
-                    letterSpace=1;
+                richEditor.setLineHeight(letterSpace += 10);
+                if (letterSpace >= 100) {
+                    letterSpace = 1;
                 }
+                break;
+            case R.id.tv_sub:
+                richEditor.setSubscript();
+                break;
+            case R.id.tv_sup:
+                richEditor.setSuperscript();
+                break;
+            case R.id.tv_sort:
+                richEditor.setNumbers();
+                break;
+            case R.id.tv_un_sort:
+                richEditor.setBullets();
+                break;
+            case R.id.tv_p_w_retract:
+                richEditor.setIndent();
+                break;
+            case R.id.tv_p_w_retract_back:
+                richEditor.setOutdent();
+                break;
+            case R.id.tv_p_row_retract:
+                if (isTextIndent) {
+                    richEditor.setTextIndent(2);
+                } else {
+                    richEditor.setTextIndent(0);
+                }
+
+                isTextIndent = !isTextIndent;
+                break;
+            case R.id.tv_p_space_before:
+                richEditor.insertBr();
+                break;
+            case R.id.tv_p_space_after:
+                richEditor.insertBr();
+
+                break;
+
+            case R.id.tv_video:
+                type = 2;
+                selectPicVideos(2);
+                break;
+            case R.id.tv_pic:
+                type = 1;
+                selectPicVideos(1);
+
+                break;
+            case R.id.tv_audio:
+                type = 3;
+                Intent intent3 = new Intent(this, AudioPickActivity.class);
+                intent3.putExtra(IS_NEED_RECORDER, true);
+                intent3.putExtra(Constant.MAX_NUMBER, 1);
+                startActivityForResult(intent3, Constant.REQUEST_CODE_PICK_AUDIO);
+                break;
+            case R.id.tv_save:
+                richEditor.saveTest(mFile.getPath()+"/"+ System.currentTimeMillis()+".txt");
+                break;
+            case R.id.tv_recover:
                 break;
         }
     }
@@ -230,6 +363,49 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
         isFontColor = false;
         isFontBg = false;
 
+    }
+
+    private void selectPicVideos(int type) {
+        if (!PermissionUtil.check(this, CAMERA_PERMISSIONS)) {
+            PermissionUtil.showTips(this, CAMERA_PERMISSIONS);
+            return;
+        }
+        Matisse.from(this)
+                .choose(type == 1 ? MimeType.ofImage() : MimeType.ofVideo())
+                .countable(true)
+                .maxSelectable(1)
+                .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                .thumbnailScale(0.85f)
+                .imageEngine(new GlideEngine())
+                .forResult(REQUEST_CODE_CHOOSE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
+            uris = Matisse.obtainResult(data);
+            mPaths = new ArrayList<>(uris.size());
+            for (Uri uri : uris) {
+                mPaths.add(UriToPathUtil.getRealFilePath(RichEditorActivity.this, uri));
+            }
+            if (type == 1) {
+                richEditor.insertImage(mPaths.get(0), "图片");
+            }
+            if (type == 2) {
+                richEditor.insertVideo(mPaths.get(0));
+            }
+
+
+        }
+
+        if (type == 3) {
+
+            ArrayList<AudioFile> list = data.getParcelableArrayListExtra(Constant.RESULT_PICK_AUDIO);
+
+            richEditor.insertAudio(list.get(0).getPath(), list.get(0).getName());
+        }
     }
 
 }

@@ -50,6 +50,22 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/tv_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="保存"/>
+
+            <TextView
+                android:id="@+id/tv_recover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="恢复"/>
+
             <ImageView
                 android:id="@+id/iv_link"
                 android:layout_width="wrap_content"
@@ -192,6 +208,90 @@
                 android:layout_margin="10dp"
                 android:gravity="center"
                 android:text="行间距"/>
+            <TextView
+                android:id="@+id/tv_sub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="下标"/>
+            <TextView
+                android:id="@+id/tv_sup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="上标"/>
+            <TextView
+                android:id="@+id/tv_sort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="有序"/>
+            <TextView
+                android:id="@+id/tv_un_sort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="无序"/>
+            <TextView
+                android:id="@+id/tv_p_w_retract"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="段落整体缩进"/>
+            <TextView
+                android:id="@+id/tv_p_w_retract_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="段落整体缩进回退"/>
+            <TextView
+                android:id="@+id/tv_p_row_retract"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="段落首行缩进"/>
+            <TextView
+                android:id="@+id/tv_p_space_before"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="段前间距"/>
+            <TextView
+                android:id="@+id/tv_p_space_after"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="段后间距"/>
+            <TextView
+                android:id="@+id/tv_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="插入视频"/>
+            <TextView
+                android:id="@+id/tv_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="插入图片"/>
+            <TextView
+                android:id="@+id/tv_audio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="插入音频"/>
         </LinearLayout>
     </HorizontalScrollView>
 
