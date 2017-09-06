@@ -37,13 +37,15 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     provided 'com.google.dagger:dagger-compiler:2.0.1'
     compile 'com.vincent.filepicker:MultiTypeFilePicker:1.0.4'
+
+    compile 'com.afollestad.material-dialogs:commons:0.9.2.1'
 }
 
 def javaVersion = JavaVersion.VERSION_1_7
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
 
     compileOptions {
         sourceCompatibility javaVersion

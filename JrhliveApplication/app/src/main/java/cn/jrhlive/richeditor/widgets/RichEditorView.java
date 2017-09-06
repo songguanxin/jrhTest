@@ -237,6 +237,10 @@ public class RichEditorView extends WebView {
         exec("javascript:RE.setTextBackgroundColor('" + hex + "');");
     }
 
+    public void searchText(String keyWord){
+        exec("javascript:RE.searchText('"+keyWord+"');");
+    }
+
     public void insertImage(String url, String alt) {
         exec("javascript:RE.prepareInsert();");
         exec("javascript:RE.insertImage('" + url + "', '" + alt + "');");

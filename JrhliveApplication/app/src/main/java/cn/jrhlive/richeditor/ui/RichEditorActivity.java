@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.ColorInt;
+import android.util.Log;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -143,6 +144,12 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
     @BindView(R.id.tv_recover)
     TextView tvRecover;
 
+    private static final String TAG = "RichEditorActivity";
+    @BindView(R.id.tv_search)
+    TextView tvSearch;
+    @BindView(R.id.tv_replace)
+    TextView tvReplace;
+
     @Override
     protected void initEvent() {
 
@@ -164,6 +171,7 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
 //                richEditor.updateContentLength();
                 tvTitle.setText("字数：" + text.trim().length());
 
+                Log.e(TAG, "onTextChange: " + text);
             }
         });
 
@@ -178,8 +186,8 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
 
     @OnClick({R.id.iv_link, R.id.iv_bold, R.id.iv_insertmore, R.id.iv_italic,
             R.id.iv_strike, R.id.iv_underline, R.id.iv_quote, R.id.tv_h1,
-            R.id.tv_h2, R.id.tv_h3, R.id.tv_h4, R.id.tv_h5, R.id.iv_photo,
-            R.id.iv_font, R.id.iv_add, R.id.iv_undo, R.id.iv_todo,R.id.tv_save, R.id.tv_recover,
+            R.id.tv_h2, R.id.tv_h3, R.id.tv_h4, R.id.tv_h5, R.id.iv_photo,R.id.tv_search,R.id.tv_replace,
+            R.id.iv_font, R.id.iv_add, R.id.iv_undo, R.id.iv_todo, R.id.tv_save, R.id.tv_recover,
             R.id.tv_font_color, R.id.tv_font_bg, R.id.tv_left, R.id.tv_mid, R.id.tv_right,
             R.id.tv_letter_space, R.id.tv_row_space, R.id.tv_sub, R.id.tv_sup, R.id.tv_sort,
             R.id.tv_un_sort, R.id.tv_p_w_retract, R.id.tv_p_w_retract_back,
@@ -330,10 +338,15 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
                 startActivityForResult(intent3, Constant.REQUEST_CODE_PICK_AUDIO);
                 break;
             case R.id.tv_save:
-                richEditor.saveTest(mFile.getPath()+"/"+ System.currentTimeMillis()+".txt");
+                richEditor.saveTest(mFile.getPath() + "/" + System.currentTimeMillis() + ".txt");
                 break;
             case R.id.tv_recover:
                 break;
+            case R.id.tv_search:
+                break;
+            case R.id.tv_replace:
+                break;
+
         }
     }
 

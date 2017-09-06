@@ -373,6 +373,11 @@ RE.removeFormat = function() {
     execCommand('removeFormat', false, null);
 }
 
+RE.searchText = function (str){
+    var content= RE.getHtml().split(str);
+    document.getElementById('editor').innerHTML=content.join('<span style="background: #f00">' + str + '</span>');
+}
+
 // Event Listeners
 RE.editor.addEventListener("input", RE.callback);
 RE.editor.addEventListener("keyup", function(e) {
