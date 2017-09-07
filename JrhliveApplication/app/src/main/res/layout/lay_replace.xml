@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <EditText
+        android:id="@+id/et_keyword"
+        android:padding="@dimen/_10dp"
+        android:hint="请输入要查询的关键词"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+    <EditText
+        android:visibility="gone"
+        android:id="@+id/et_keyword_re"
+        android:padding="@dimen/_10dp"
+        android:hint="请输入要替换的关键词"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+
+
+</LinearLayout>

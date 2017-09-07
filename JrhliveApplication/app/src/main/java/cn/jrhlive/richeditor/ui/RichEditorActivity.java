@@ -6,16 +6,21 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
 import com.jrhlibrary.utils.PermissionUtil;
+import com.jrhlibrary.utils.StringUtil;
 import com.jrhlibrary.utils.UriToPathUtil;
 import com.vincent.filepicker.Constant;
 import com.vincent.filepicker.activity.AudioPickActivity;
@@ -149,6 +154,7 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
     TextView tvSearch;
     @BindView(R.id.tv_replace)
     TextView tvReplace;
+    EditText etKeyWordre;
 
     @Override
     protected void initEvent() {
@@ -343,8 +349,51 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
             case R.id.tv_recover:
                 break;
             case R.id.tv_search:
+                MaterialDialog  dialog = new MaterialDialog.Builder(this)
+                        .title("文字查找")
+                        .customView(R.layout.lay_replace,true)
+                        .positiveText("查找")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                EditText etKeyWord = dialog.getCustomView().findViewById(R.id.et_keyword);
+                                String keyword = etKeyWord.getText().toString().trim();
+                                if (StringUtil.isBlank(keyword)){
+                                    ToastUtil.showMessage("请输入关键字搜索");
+                                    return;
+                                }
+                                richEditor.searchText(keyword);
+                                dialog.dismiss();
+                            }
+                        }).build();
+                dialog.show();
                 break;
             case R.id.tv_replace:
+                MaterialDialog  dialogre = new MaterialDialog.Builder(this)
+                        .title("文字 替换")
+                        .customView(R.layout.lay_replace,true)
+                        .positiveText("替换")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                EditText etKeyWord = dialog.getCustomView().findViewById(R.id.et_keyword);
+                                String keyword = etKeyWord.getText().toString().trim();
+                                String reword =etKeyWordre.getText().toString().trim();
+                                if (StringUtil.isBlank(keyword)){
+                                    ToastUtil.showMessage("请输入关键字搜索");
+                                    return;
+                                }
+                                if (StringUtil.isBlank(reword)){
+                                    ToastUtil.showMessage("请输入关键字替换");
+                                    return;
+                                }
+                                richEditor.replaceText(keyword,reword);
+                                dialog.dismiss();
+                            }
+                        }).build();
+                etKeyWordre = dialogre.getCustomView().findViewById(R.id.et_keyword_re);
+                etKeyWordre.setVisibility(View.VISIBLE);
+                dialogre.show();
                 break;
 
         }

@@ -240,6 +240,9 @@ public class RichEditorView extends WebView {
     public void searchText(String keyWord){
         exec("javascript:RE.searchText('"+keyWord+"');");
     }
+    public void replaceText(String keyWord,String replaceWord){
+        exec("javascript:RE.replaceText('"+keyWord+"','"+ replaceWord+"');");
+    }
 
     public void insertImage(String url, String alt) {
         exec("javascript:RE.prepareInsert();");

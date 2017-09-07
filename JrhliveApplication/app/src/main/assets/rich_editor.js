@@ -375,7 +375,11 @@ RE.removeFormat = function() {
 
 RE.searchText = function (str){
     var content= RE.getHtml().split(str);
-    document.getElementById('editor').innerHTML=content.join('<span style="background: #f00">' + str + '</span>');
+   RE.editor.innerHTML=content.join('<span style="background: #f00">' + str + '</span>');
+}
+RE.replaceText = function (primaryWord,replaceWord){
+    var content= RE.getHtml().split(primaryWord);
+    RE.editor.innerHTML=content.join('<span style="background: #f00">' + replaceWord + '</span>');
 }
 
 // Event Listeners
