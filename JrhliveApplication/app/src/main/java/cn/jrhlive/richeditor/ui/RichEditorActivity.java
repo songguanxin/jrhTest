@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Environment;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -17,8 +16,11 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.blankj.utilcode.utils.TimeUtils;
+import com.duanqu.qupaisdk.tools.io.FileUtils;
 import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
+import com.jrhlibrary.utils.ActivityUtils;
 import com.jrhlibrary.utils.PermissionUtil;
 import com.jrhlibrary.utils.StringUtil;
 import com.jrhlibrary.utils.UriToPathUtil;
@@ -30,22 +32,37 @@ import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.jrhlive.R;
+import cn.jrhlive.RxBus.RxBus;
 import cn.jrhlive.activity.BaseActivity;
+import cn.jrhlive.richeditor.bean.FileInfo;
+import cn.jrhlive.richeditor.constant.RichorConstant;
+import cn.jrhlive.richeditor.events.Event;
 import cn.jrhlive.richeditor.widgets.RichEditorView;
 import cn.jrhlive.richeditor.widgets.listener.OnTextChangeListener;
 import cn.jrhlive.utils.ToastUtil;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 import static cn.jrhlive.constants.Constant.CAMERA_PERMISSIONS;
 import static cn.jrhlive.meishe.MeisheActivity.REQUEST_CODE_CHOOSE;
+import static cn.jrhlive.richeditor.constant.RichorConstant.FILE_FOLDER;
 import static com.vincent.filepicker.activity.AudioPickActivity.IS_NEED_RECORDER;
 
 public class RichEditorActivity extends BaseActivity implements ColorPickerDialogListener {
+
 
 
     @BindView(R.id.tv_title)
@@ -156,17 +173,58 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
     TextView tvReplace;
     EditText etKeyWordre;
 
+
+    String mContent;
     @Override
     protected void initEvent() {
-
         initFiles();
+        update();
+    }
+
+    private void update() {
+        RxBus.getDefault().toObservable(Event.class)
+                .map(new Function<Event, String>() {
+                    @Override
+                    public String apply(@io.reactivex.annotations.NonNull Event event) throws Exception {
+                        if (event.getCode()== RichorConstant.FILE_RECOVER)
+                            return ((FileInfo)event.getT()).getPath();
+                        return null;
+                    }
+                }).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull String s) throws Exception {
+                        recover(s);
+                    }
+                });
+
+    }
+
+    private void recover(String s) {
+        File file = new File(s);
+        richEditor.reset();
+        try {
+            richEditor.setHtml(FileUtils.readFileToString(file,"utf-8"));
+            Log.e(TAG,FileUtils.readFileToString(file,"utf-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initFiles() {
-        mFile = new File(Environment.getExternalStorageDirectory() + "/richEditor");
-        if (!mFile.exists()) {
-            mFile.mkdirs();
+        File richor = new File(FILE_FOLDER);
+        if (!richor.exists()){
+            richor.mkdirs();
         }
+        mFile = new File(FILE_FOLDER, TimeUtils.milliseconds2String(System.currentTimeMillis())+".txt");
+        if (!mFile.exists()) {
+            try {
+                mFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     @Override
@@ -174,13 +232,51 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
         richEditor.setmTextChangeListener(new OnTextChangeListener() {
             @Override
             public void onTextChange(String text) {
-//                richEditor.updateContentLength();
+                mContent = text;
                 tvTitle.setText("字数：" + text.trim().length());
-
-                Log.e(TAG, "onTextChange: " + text);
+                saveFile(5);
             }
+
         });
 
+    }
+
+    private void saveFile(int time) {
+        Observable.timer(5, TimeUnit.SECONDS)
+                .observeOn(Schedulers.io())
+                .subscribe(new Observer<Long>() {
+                    Disposable disposable=null;
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable = d;
+                    }
+
+                    @Override
+                    public void onNext(Long aLong) {
+
+                        if (mFile!=null){
+                            if (!mFile.exists()){
+                                initFiles();
+                                return;
+                            }
+                            try {
+                                FileUtils.write(mFile,mContent,"utf-8");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        disposable.dispose();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        disposable.dispose();
+                    }
+                });
     }
 
     @Override
@@ -344,9 +440,10 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
                 startActivityForResult(intent3, Constant.REQUEST_CODE_PICK_AUDIO);
                 break;
             case R.id.tv_save:
-                richEditor.saveTest(mFile.getPath() + "/" + System.currentTimeMillis() + ".txt");
+                saveFile(1);
                 break;
             case R.id.tv_recover:
+                ActivityUtils.startActivity(this,FileSelectActivity.class);
                 break;
             case R.id.tv_search:
                 MaterialDialog  dialog = new MaterialDialog.Builder(this)

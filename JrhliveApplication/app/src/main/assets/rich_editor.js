@@ -50,6 +50,10 @@ RE.setHtml = function(contents) {
     RE.editor.innerHTML = decodeURIComponent(contents.replace(/\+/g, '%20'));
 }
 
+RE.reset = function(){
+
+RE.editor.innerHTML='';
+}
 RE.getHtml = function() {
 
     var ranges = [

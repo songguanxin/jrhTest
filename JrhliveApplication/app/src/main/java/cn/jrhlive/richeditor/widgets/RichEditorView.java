@@ -261,6 +261,12 @@ public class RichEditorView extends WebView {
         exec("javascript:RE.saveTest('"+path+"');");
 
     }
+    public void setHtml(String content){
+        exec("javascript:RE.setHtml('"+content+"');");
+    }
+    public void reset(){
+        exec("javascript:RE.reset()");
+    }
 
     public void setSubscript() {
         exec("javascript:RE.setSubscript();");

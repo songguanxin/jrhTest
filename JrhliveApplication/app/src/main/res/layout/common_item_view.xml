@@ -8,6 +8,7 @@
         android:padding="@dimen/_10dp"
         android:text="ss"
         style="@style/Base.TextAppearance.AppCompat.Display1"
+        android:textSize="20sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

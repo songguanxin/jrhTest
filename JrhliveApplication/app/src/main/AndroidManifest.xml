@@ -143,6 +143,8 @@
         </activity>
         <activity android:name=".toast.ToastActivity">
         </activity>
+        <activity android:name=".richeditor.ui.FileSelectActivity">
+        </activity>
     </application>
 
 </manifest>
