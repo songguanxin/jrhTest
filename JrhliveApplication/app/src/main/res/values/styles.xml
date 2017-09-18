@@ -19,6 +19,7 @@
     </style>
 <style name="AppDefaultTranslucent" parent="AppDefaultTheme">
     <item name="android:windowIsTranslucent">true</item>
+    <item name="android:windowNoTitle">true</item>
 </style>
 
     <style name="AppDefaultTheme.Icon">

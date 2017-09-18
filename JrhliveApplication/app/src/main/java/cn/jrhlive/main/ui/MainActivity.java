@@ -12,7 +12,6 @@ import com.jrhlibrary.utils.ActivityUtils;
 import com.jrhlibrary.widgets.recyclerview.adapter.CommonAdapter;
 import com.jrhlibrary.widgets.recyclerview.adapter.MultiItemTypeAdapter;
 import com.jrhlibrary.widgets.recyclerview.base.ViewHolder;
-import com.oushangfeng.pinnedsectionitemdecoration.PinnedHeaderItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +111,7 @@ public class MainActivity extends BaseActivity implements MainView {
     protected void initView() {
         setSwipeBackEnable(false);
         rc.setLayoutManager(new LinearLayoutManager(this));
-        rc.addItemDecoration(new PinnedHeaderItemDecoration.Builder(0).setDividerId(R.drawable.diver).enableDivider(true).create());
+//        rc.addItemDecoration(new PinnedHeaderItemDecoration.Builder(0).setDividerId(R.drawable.diver).enableDivider(true).create());
         mAdapter = new CommonAdapter<MainItem>(this,R.layout.common_item_view,listDatas) {
             @Override
             protected void convert(ViewHolder holder, MainItem mainItem, int positioin) {

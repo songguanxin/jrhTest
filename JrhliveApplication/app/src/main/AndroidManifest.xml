@@ -139,7 +139,10 @@
         </activity>
         <activity android:name=".ani.BoundAniActivity">
         </activity>
-        <activity android:name=".richeditor.ui.RichEditorActivity">
+        <activity
+            android:name=".richeditor.ui.RichEditorActivity"
+            android:screenOrientation="portrait"
+            >
         </activity>
         <activity android:name=".toast.ToastActivity">
         </activity>

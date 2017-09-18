@@ -266,6 +266,7 @@ public class RichEditorView extends WebView {
     }
     public void reset(){
         exec("javascript:RE.reset()");
+        exec("javascript:RE.prepareInsert();");
     }
 
     public void setSubscript() {

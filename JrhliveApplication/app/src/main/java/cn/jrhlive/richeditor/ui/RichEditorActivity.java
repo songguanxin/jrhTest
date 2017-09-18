@@ -202,10 +202,13 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
 
     private void recover(String s) {
         File file = new File(s);
+        if (richEditor==null)return;
         richEditor.reset();
+
         try {
             richEditor.setHtml(FileUtils.readFileToString(file,"utf-8"));
             Log.e(TAG,FileUtils.readFileToString(file,"utf-8"));
+            Log.w(TAG,FileUtils.readFileToString(file));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -567,4 +570,18 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            if (richEditor != null) {
+                richEditor.removeAllViews();
+                richEditor.destroy();
+                richEditor = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }
