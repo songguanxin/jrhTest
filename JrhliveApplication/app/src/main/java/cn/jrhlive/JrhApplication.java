@@ -2,7 +2,6 @@ package cn.jrhlive;
 
 import android.app.Application;
 
-import com.antfortune.freeline.FreelineCore;
 import com.facebook.stetho.Stetho;
 import com.jrhlibrary.utils.Mobile;
 
@@ -17,7 +16,7 @@ public class JrhApplication extends Application {
     @Override
     public void onCreate() {
 
-        FreelineCore.init(this);
+//        FreelineCore.init(this);
         super.onCreate();
         APP=this;
 //        MultiDex.install(this);

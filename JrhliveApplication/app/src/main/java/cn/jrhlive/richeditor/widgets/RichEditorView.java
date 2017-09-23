@@ -8,8 +8,10 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.webkit.JavascriptInterface;
+import android.webkit.JsResult;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -23,6 +25,7 @@ import cn.jrhlive.richeditor.widgets.bean.FontStyleType;
 import cn.jrhlive.richeditor.widgets.listener.AfterInitialLoadListener;
 import cn.jrhlive.richeditor.widgets.listener.OnDecorationStateListener;
 import cn.jrhlive.richeditor.widgets.listener.OnTextChangeListener;
+import cn.jrhlive.utils.ToastUtil;
 
 /**
  * desc:do rich editor
@@ -57,16 +60,45 @@ public class RichEditorView extends WebView {
         super(context, attrs, defStyleAttr);
         setVerticalScrollBarEnabled(false);
         setHorizontalScrollBarEnabled(false);
-        getSettings().setAllowFileAccess(true);
-        getSettings().setJavaScriptEnabled(true);
-        setWebChromeClient(new WebChromeClient());
+        WebSettings settings = getSettings();
+        settings.setAllowFileAccess(true);
+        settings.setJavaScriptEnabled(true);
+        //支持获取手势焦点
+        requestFocusFromTouch();
+        settings.setPluginState(WebSettings.PluginState.ON);
+        //设置适应屏幕
+        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
+        settings.setNeedInitialFocus(true);
+        //支持自动加载图片
+        if (Build.VERSION.SDK_INT >= 19) {
+            settings.setLoadsImagesAutomatically(true);
+        } else {
+            settings.setLoadsImagesAutomatically(false);
+        }
+        settings.setNeedInitialFocus(true);
+        //设置编码格式
+        settings.setDefaultTextEncodingName("UTF-8");
+
+        //支持缩放
+        settings.setSupportZoom(false);
 
         setWebViewClient(createWebviewClient());
         loadUrl(SETUP_HTML);
         addJavascriptInterface(this, "android");
 //        evaluateJavaScript(this);
         applyAttributes(context, attrs);
+        setWebChromeClient(new WebChromeClient(){
+
+            @Override
+            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+                ToastUtil.showMessage(message);
+                return super.onJsAlert(view, url, message, result);
+            }
+        });
     }
+
+
 
     private void applyAttributes(Context context, AttributeSet attrs) {
         final int[] attrsArray = new int[]{
@@ -247,6 +279,8 @@ public class RichEditorView extends WebView {
     public void insertImage(String url, String alt) {
         exec("javascript:RE.prepareInsert();");
         exec("javascript:RE.insertImage('" + url + "', '" + alt + "');");
+        exec("javascript:RE.onImgClicked();");
+
     }
     public void insertVideo(String url) {
         exec("javascript:RE.prepareInsert();");
@@ -327,7 +361,9 @@ public class RichEditorView extends WebView {
             if (mLoadListener != null) {
                 mLoadListener.onAfterInitialLoad(isReady);
             }
+
         }
+
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -349,6 +385,11 @@ public class RichEditorView extends WebView {
 
             return super.shouldOverrideUrlLoading(view, url);
         }
+    }
+
+    @JavascriptInterface
+    public void onImgClicked(String url){
+        ToastUtil.showMessage(url);
     }
     private void evaluateJavaScript(WebView webView){
         webView.evaluateJavascript("getContentLength()", new ValueCallback<String>() {

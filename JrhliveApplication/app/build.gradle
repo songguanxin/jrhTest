@@ -63,10 +63,16 @@ android {
             release {
                 keyAlias 'jiarh'
                 keyPassword '123456'
-                storeFile file('/Users/jiarh/project/android/JrhliveApplication/app/keystore/jrh.jks')
+                storeFile file('./keystore/jrh.jks')
                 storePassword '123456'
             }
             debug {
+                storeFile file('./keystore/jrh.jks')
+                storePassword "123456"
+                keyAlias "jiarh"
+                keyPassword "123456"
+            }
+            alpha{
                 storeFile file('./keystore/jrh.jks')
                 storePassword "123456"
                 keyAlias "jiarh"
@@ -102,20 +108,23 @@ android {
 
     }
 
+
 //    aaptOptions{
 //        cruncherEnabled false
 //    }
 
-//    //use to test flavors support
-//    productFlavors {
-//        flavor1 {
-//            applicationId 'tinker.sample.android.flavor1'
-//        }
-//
-//        flavor2 {
-//            applicationId 'tinker.sample.android.flavor2'
-//        }
-//    }
+    productFlavors {
+        jrh_alpha {
+            applicationId 'cn.jrhlive.alpha'
+        }
+
+        jrh_debug {
+            applicationId 'cn.jrhlive.debug'
+        }
+        jrh_release{
+            applicationId 'cn.jrhlive.release'
+        }
+    }
 
     buildTypes {
         release {
@@ -128,6 +137,21 @@ android {
             minifyEnabled false
             signingConfig signingConfigs.debug
         }
+        alpha{
+            debuggable true
+            minifyEnabled false
+            signingConfig signingConfigs.alpha
+        }
+    }
+
+    buildTypes.all{
+
+        type->
+            Properties config = new Properties();
+            config.load(new FileInputStream("${rootDir}/config/base_url/"+name+".properties"))
+            buildConfigField("String","BASE_URL","\""+config.base_url+"\"");
+
+
     }
     sourceSets {
         main {
@@ -146,6 +170,10 @@ android {
         exclude 'META-INF/dependencies.txt'
         exclude 'META-INF/rxjava.properties'
         exclude 'META-INF/LGPL2.1'
+    }
+    lintOptions{
+        checkReleaseBuilds false
+        abortOnError false
     }
 }
 

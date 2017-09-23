@@ -215,10 +215,21 @@ RE.setBlockquote = function(b) {
         document.execCommand('formatBlock', false, '<p>');
 }
 
+//图片点击事件
+RE.onImgClicked = function(){
+
+  var imgs = document.getElementsByTagName("img");
+  for(var i=0;i<imgs.length;i++){
+  imgs[i].onclick = alert(imgs[i].src);
+ }
+}
+
 //插入图片
 RE.insertImage = function(url, alt) {
-    var html = '<img id="showImg" src="' + url + '" alt="' + alt + '" /><hr align=center width=200 color=#aaaaaa size=1 /><br/>';
-    RE.insertHTML(html);
+//    var html = '<img id="showImg" onclick=RE.onImgClicked('+url+')"src="' + url + '" alt="' + alt + '" /><hr align=center width=200 color=#aaaaaa size=1 /><br/>';
+       var imghtml = "<img id = 'showImg' src="+url+">";
+    RE.insertHTML(imghtml);
+
 }
 //插入视频
 RE.insertVideo=function(url){
