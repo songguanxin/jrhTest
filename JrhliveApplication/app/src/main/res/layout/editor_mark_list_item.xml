@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/balloon_bg_color"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/editor_mark_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="修改类型：MI X5"/>
+    <TextView
+        android:id="@+id/editor_mark_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="批注人：MI X5"
+        android:layout_below="@+id/editor_mark_type"/>
+
+    <TextView
+        android:id="@+id/editor_mark_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="批注时间：2017-10-09 14:33"
+        android:layout_below="@+id/editor_mark_author"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+    android:id="@+id/editor_mark_no_change_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="原文内容：我是MIX 5"
+    android:layout_below="@+id/editor_mark_time"
+    android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/editor_mark_has_change_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="修改后内容：我是MIX 900"
+        android:layout_below="@+id/editor_mark_no_change_text"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/editor_mark_change_reason"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="修改原因："
+        android:layout_below="@+id/editor_mark_has_change_text"
+        android:layout_marginTop="5dp"/>
+
+
+
+</RelativeLayout>

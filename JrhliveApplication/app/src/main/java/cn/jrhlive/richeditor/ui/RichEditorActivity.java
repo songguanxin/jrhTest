@@ -6,8 +6,13 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -24,6 +29,8 @@ import com.jrhlibrary.utils.ActivityUtils;
 import com.jrhlibrary.utils.PermissionUtil;
 import com.jrhlibrary.utils.StringUtil;
 import com.jrhlibrary.utils.UriToPathUtil;
+import com.jrhlibrary.widgets.recyclerview.adapter.CommonAdapter;
+import com.jrhlibrary.widgets.recyclerview.base.ViewHolder;
 import com.vincent.filepicker.Constant;
 import com.vincent.filepicker.activity.AudioPickActivity;
 import com.vincent.filepicker.filter.entity.AudioFile;
@@ -33,7 +40,9 @@ import com.zhihu.matisse.engine.impl.GlideEngine;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -42,10 +51,14 @@ import butterknife.OnClick;
 import cn.jrhlive.R;
 import cn.jrhlive.RxBus.RxBus;
 import cn.jrhlive.activity.BaseActivity;
+import cn.jrhlive.main.entity.MainItem;
+import cn.jrhlive.richeditor.RichFunction;
+import cn.jrhlive.richeditor.bean.EditorMarkBean;
 import cn.jrhlive.richeditor.bean.FileInfo;
 import cn.jrhlive.richeditor.constant.RichorConstant;
 import cn.jrhlive.richeditor.events.Event;
 import cn.jrhlive.richeditor.widgets.RichEditorView;
+import cn.jrhlive.richeditor.widgets.listener.OnSendMarkDataListener;
 import cn.jrhlive.richeditor.widgets.listener.OnTextChangeListener;
 import cn.jrhlive.utils.ToastUtil;
 import io.reactivex.Observable;
@@ -61,8 +74,7 @@ import static cn.jrhlive.meishe.MeisheActivity.REQUEST_CODE_CHOOSE;
 import static cn.jrhlive.richeditor.constant.RichorConstant.FILE_FOLDER;
 import static com.vincent.filepicker.activity.AudioPickActivity.IS_NEED_RECORDER;
 
-public class RichEditorActivity extends BaseActivity implements ColorPickerDialogListener {
-
+public class RichEditorActivity extends BaseActivity implements ColorPickerDialogListener,OnSendMarkDataListener {
 
 
     @BindView(R.id.tv_title)
@@ -175,19 +187,69 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
 
 
     String mContent;
+    @BindView(R.id.tv_piZhu)
+    TextView tvPiZhu;
+    @BindView(R.id.client_drawer)
+     DrawerLayout mDrawerLayout;
+    @BindView(R.id.content_main)
+    ViewGroup mMainView;
+    @BindView(R.id.right_recycler)
+    RecyclerView recyclerView;
+
+    CommonAdapter<EditorMarkBean> mAdapter;
+    List<EditorMarkBean> listDatas  = new ArrayList<>();
+
     @Override
     protected void initEvent() {
         initFiles();
         update();
     }
 
+    public void initListData() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if (mAdapter == null) {
+            mAdapter = new CommonAdapter<EditorMarkBean>(this,R.layout.editor_mark_list_item,listDatas) {
+                @Override
+                protected void convert(ViewHolder holder, EditorMarkBean mainItem, int positioin) {
+                    TextView changeTypeText=holder.getView(R.id.editor_mark_type);
+                    TextView author=holder.getView(R.id.editor_mark_author);
+                    TextView time=holder.getView(R.id.editor_mark_time);
+                    TextView noChangeText=holder.getView(R.id.editor_mark_no_change_text);
+                    TextView changeText=holder.getView(R.id.editor_mark_has_change_text);
+                    TextView changeReason=holder.getView(R.id.editor_mark_change_reason);
+                    int changeType = mainItem.getChangeType();
+                    switch (changeType) {
+                        case EditorMarkBean.CHANGE:
+                            changeTypeText.setText("修改类型：添加或替换");
+                            break;
+                        case EditorMarkBean.DELETE:
+                            changeTypeText.setText("修改类型：删除");
+                            break;
+                    }
+                    author.setText("作者："+mainItem.getAuthor());
+                    SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    String date=simpleDateFormat.format(mainItem.getDate());
+                    time.setText("批注时间："+date);
+                    noChangeText.setText("原文内容："+mainItem.getNoChangeText());
+                    changeText.setText("修改后内容："+mainItem.getHasChangeText());
+                    changeReason.setText("修改原因："+mainItem.getChangeReason());
+                }
+            };
+            recyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
+
+    }
+
+
     private void update() {
         RxBus.getDefault().toObservable(Event.class)
                 .map(new Function<Event, String>() {
                     @Override
                     public String apply(@io.reactivex.annotations.NonNull Event event) throws Exception {
-                        if (event.getCode()== RichorConstant.FILE_RECOVER)
-                            return ((FileInfo)event.getT()).getPath();
+                        if (event.getCode() == RichorConstant.FILE_RECOVER)
+                            return ((FileInfo) event.getT()).getPath();
                         return null;
                     }
                 }).observeOn(AndroidSchedulers.mainThread())
@@ -202,13 +264,13 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
 
     private void recover(String s) {
         File file = new File(s);
-        if (richEditor==null)return;
+        if (richEditor == null) return;
         richEditor.reset();
 
         try {
-            richEditor.setHtml(FileUtils.readFileToString(file,"utf-8"));
-            Log.e(TAG,FileUtils.readFileToString(file,"utf-8"));
-            Log.w(TAG,FileUtils.readFileToString(file));
+            richEditor.setHtml(FileUtils.readFileToString(file, "utf-8"));
+            Log.e(TAG, FileUtils.readFileToString(file, "utf-8"));
+            Log.w(TAG, FileUtils.readFileToString(file));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -216,10 +278,10 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
 
     private void initFiles() {
         File richor = new File(FILE_FOLDER);
-        if (!richor.exists()){
+        if (!richor.exists()) {
             richor.mkdirs();
         }
-        mFile = new File(FILE_FOLDER, TimeUtils.milliseconds2String(System.currentTimeMillis())+".txt");
+        mFile = new File(FILE_FOLDER, TimeUtils.milliseconds2String(System.currentTimeMillis()) + ".txt");
         if (!mFile.exists()) {
             try {
                 mFile.createNewFile();
@@ -232,6 +294,33 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
 
     @Override
     protected void initView() {
+        //DrawerLayout
+        mDrawerLayout.setScrimColor(Color.TRANSPARENT);
+        mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                // 得到contentView
+                mMainView.setTranslationX(-drawerView.getMeasuredWidth() * (slideOffset));
+                mMainView.getLayoutParams().height = (int) (drawerView.getMeasuredHeight() *
+                        (1 - 0.1 * slideOffset));
+                mMainView.requestLayout();
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
         richEditor.setmTextChangeListener(new OnTextChangeListener() {
             @Override
             public void onTextChange(String text) {
@@ -242,13 +331,23 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
 
         });
 
+        RichFunction.getInstance().addSendMarkListener(this);
+        initListData();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
     }
 
     private void saveFile(int time) {
         Observable.timer(5, TimeUnit.SECONDS)
                 .observeOn(Schedulers.io())
                 .subscribe(new Observer<Long>() {
-                    Disposable disposable=null;
+                    Disposable disposable = null;
+
                     @Override
                     public void onSubscribe(Disposable d) {
                         disposable = d;
@@ -257,13 +356,13 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
                     @Override
                     public void onNext(Long aLong) {
 
-                        if (mFile!=null){
-                            if (!mFile.exists()){
+                        if (mFile != null) {
+                            if (!mFile.exists()) {
                                 initFiles();
                                 return;
                             }
                             try {
-                                FileUtils.write(mFile,mContent,"utf-8");
+                                FileUtils.write(mFile, mContent, "utf-8");
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -285,18 +384,19 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
     @Override
     protected int getViewId() {
 
-        return R.layout.activity_rich_editor;
+        return R.layout.activity_rich_editor_drawer;
     }
 
 
     @OnClick({R.id.iv_link, R.id.iv_bold, R.id.iv_insertmore, R.id.iv_italic,
             R.id.iv_strike, R.id.iv_underline, R.id.iv_quote, R.id.tv_h1,
-            R.id.tv_h2, R.id.tv_h3, R.id.tv_h4, R.id.tv_h5, R.id.iv_photo,R.id.tv_search,R.id.tv_replace,
+            R.id.tv_h2, R.id.tv_h3, R.id.tv_h4, R.id.tv_h5, R.id.iv_photo, R.id.tv_search, R.id.tv_replace,
             R.id.iv_font, R.id.iv_add, R.id.iv_undo, R.id.iv_todo, R.id.tv_save, R.id.tv_recover,
             R.id.tv_font_color, R.id.tv_font_bg, R.id.tv_left, R.id.tv_mid, R.id.tv_right,
             R.id.tv_letter_space, R.id.tv_row_space, R.id.tv_sub, R.id.tv_sup, R.id.tv_sort,
             R.id.tv_un_sort, R.id.tv_p_w_retract, R.id.tv_p_w_retract_back,
-            R.id.tv_p_row_retract, R.id.tv_p_space_before, R.id.tv_p_space_after, R.id.tv_video, R.id.tv_pic, R.id.tv_audio
+            R.id.tv_p_row_retract, R.id.tv_p_space_before, R.id.tv_p_space_after, R.id.tv_video, R.id.tv_pic,
+            R.id.tv_audio,R.id.tv_piZhu
 
     })
     public void onViewClicked(View view) {
@@ -446,19 +546,19 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
                 saveFile(1);
                 break;
             case R.id.tv_recover:
-                ActivityUtils.startActivity(this,FileSelectActivity.class);
+                ActivityUtils.startActivity(this, FileSelectActivity.class);
                 break;
             case R.id.tv_search:
-                MaterialDialog  dialog = new MaterialDialog.Builder(this)
+                MaterialDialog dialog = new MaterialDialog.Builder(this)
                         .title("文字查找")
-                        .customView(R.layout.lay_replace,true)
+                        .customView(R.layout.lay_replace, true)
                         .positiveText("查找")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 EditText etKeyWord = dialog.getCustomView().findViewById(R.id.et_keyword);
                                 String keyword = etKeyWord.getText().toString().trim();
-                                if (StringUtil.isBlank(keyword)){
+                                if (StringUtil.isBlank(keyword)) {
                                     ToastUtil.showMessage("请输入关键字搜索");
                                     return;
                                 }
@@ -469,31 +569,39 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
                 dialog.show();
                 break;
             case R.id.tv_replace:
-                MaterialDialog  dialogre = new MaterialDialog.Builder(this)
+                MaterialDialog dialogre = new MaterialDialog.Builder(this)
                         .title("文字 替换")
-                        .customView(R.layout.lay_replace,true)
+                        .customView(R.layout.lay_replace, true)
                         .positiveText("替换")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 EditText etKeyWord = dialog.getCustomView().findViewById(R.id.et_keyword);
                                 String keyword = etKeyWord.getText().toString().trim();
-                                String reword =etKeyWordre.getText().toString().trim();
-                                if (StringUtil.isBlank(keyword)){
+                                String reword = etKeyWordre.getText().toString().trim();
+                                if (StringUtil.isBlank(keyword)) {
                                     ToastUtil.showMessage("请输入关键字搜索");
                                     return;
                                 }
-                                if (StringUtil.isBlank(reword)){
+                                if (StringUtil.isBlank(reword)) {
                                     ToastUtil.showMessage("请输入关键字替换");
                                     return;
                                 }
-                                richEditor.replaceText(keyword,reword);
+                                richEditor.replaceText(keyword, reword);
                                 dialog.dismiss();
                             }
                         }).build();
                 etKeyWordre = dialogre.getCustomView().findViewById(R.id.et_keyword_re);
                 etKeyWordre.setVisibility(View.VISIBLE);
                 dialogre.show();
+                break;
+            case R.id.tv_piZhu://是否弹出批注选择框
+                boolean showPiZhu = richEditor.getLongPressMode();
+                if (showPiZhu) {
+                    richEditor.setLongPressMode(false);
+                } else {
+                    richEditor.setLongPressMode(true);
+                }
                 break;
 
         }
@@ -581,6 +689,32 @@ public class RichEditorActivity extends BaseActivity implements ColorPickerDialo
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        RichFunction.getInstance().removeSendMarkListener(this);
+
+    }
+
+    @Override
+    public void setMark(final EditorMarkBean editorMarkBean) {
+        if (editorMarkBean != null) {
+            //TODO 添加抽屉数据
+            runOnUiThread(new Thread() {
+                @Override
+                public void run() {
+                    super.run();
+                    listDatas.add(editorMarkBean);
+                    initListData();
+                    int changeType = editorMarkBean.getChangeType();
+                    switch (changeType) {
+                        case EditorMarkBean.CHANGE:
+                           richEditor.getSpan(EditorMarkBean.CHANGE,editorMarkBean.getHasChangeText());
+                            break;
+                        case EditorMarkBean.DELETE:
+                            richEditor.getSpan(EditorMarkBean.DELETE,editorMarkBean.getHasChangeText());
+                            break;
+                    }
+                }
+            });
         }
 
     }
