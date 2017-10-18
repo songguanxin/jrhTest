@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/_10dp">
+
+    <TextView
+        android:id="@+id/dialog_remind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="温馨提示"
+        android:textSize="18sp"
+        android:padding="5dp"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:id="@+id/dialog_editor_edit"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/dialog_remind"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="5dp"
+        android:hint="请输入作者名称"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/dialog_editor_edit">
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/dialog_editor_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="取消"
+            />
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/dialog_editor_confirm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="确定"
+            />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

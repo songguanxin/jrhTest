@@ -148,6 +148,7 @@
         </activity>
         <activity android:name=".richeditor.ui.FileSelectActivity">
         </activity>
+        <activity android:name=".richeditor.ui.EditorMarkActivity"/>
     </application>
 
 </manifest>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey">
+
+    <RelativeLayout
+        android:id="@+id/editor_mark_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:id="@+id/editor_mark_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableLeft="@drawable/ic_back"
+            android:padding="5dp"
+            android:text="批注"
+            android:textSize="18sp"
+            android:textColor="@color/qupai_white_opacity_70pct"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/editor_mark_confirm_or_cancel"
+            android:text="确定"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:padding="5dp"
+            android:textColor="@color/qupai_white_opacity_70pct"
+            android:layout_alignParentRight="true"
+            />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/editor_mark_author_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="作者：MI 5X"
+        android:layout_below="@+id/editor_mark_title_layout"
+        android:padding="5dp"
+        />
+
+    <TextView
+        android:id="@+id/editor_mark_author_content_no_change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="原文内容:"
+        android:layout_below="@+id/editor_mark_author_name"
+        android:padding="5dp"
+        />
+
+    <TextView
+        android:id="@+id/editor_mark_author_change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="修改内容："
+        android:layout_below="@+id/editor_mark_author_content_no_change"
+        android:padding="5dp"
+        />
+
+    <EditText
+        android:id="@+id/editor_mark_content"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@+id/editor_mark_author_change"
+        android:background="@android:color/transparent"
+        android:padding="5dp"
+        android:gravity="left"/>
+
+    <TextView
+        android:id="@+id/editor_mark_change_reason_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editor_mark_content"
+        android:text="修改原因："
+        android:textSize="18sp"
+        android:padding="5dp"/>
+    <EditText
+        android:id="@+id/editor_mark_content_reason"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/editor_mark_change_reason_title"
+        android:background="@android:color/transparent"
+        android:padding="5dp"
+        android:gravity="left"
+        android:hint="请填写修改原因"/>
+
+</RelativeLayout>

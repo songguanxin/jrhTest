@@ -22,6 +22,8 @@ RE.currentSelection = {
     "endContainer": 0,
     "endOffset": 0};
 
+var spanId="";
+
 RE.editor = document.getElementById('editor');
 
 document.addEventListener("selectionchange", function() { RE.backuprange(); });
@@ -457,4 +459,47 @@ FileSaver.saveAs(blob, path);
 //saveAs(blob, path);
 
 }
+
+
+//替换选中文本内容，参数text为要替换的内容
+RE.replaceSelectionText=function (title) {
+    //非IE浏览器
+    var titleText=title;
+    var txt;
+    if (window.getSelection) {
+        var sel = window.getSelection();
+        txt=sel.toString();
+        var r = sel.getRangeAt(0); //即使已经执行了deleteFromDocument(), 这个函数仍然返回一个有效对象.
+        sel.deleteFromDocument(); //清除选择的内容
+        var selFrag = r.cloneContents(); //克隆选择的内容
+        var timestamp = Date.parse( new Date());
+        var span = document.createElement('span'); //生成一个插入对象
+        span.id=timestamp;
+        spanId=timestamp;
+        span.innerHTML = txt; //设置这个对象的内容
+        r.insertNode(span); //把对象插入到选区, 这个操作不会替换选择的内容, 而是追加到选区的后面, 所以如果需要普通粘贴的替换效果, 之前执行deleteFromDocument()函数.
+    }
+    android.callback(txt,titleText);
+}
+
+//根据id找到span标签,0为删除，1为修改
+RE.getSpan=function(action,text){
+   var span=document.getElementById(spanId);
+   if(action==0){//删除操作
+    span.style.backgroundColor="white";
+    span.style.textDecorationLine="line-through";
+//   var imgHtml = "<img class='icon_edit' vertical-align:super onclick='testAlert()'/>";
+//    document.execCommand('insertHTML', false, imgHtml);
+   }else{
+    span.innerText=text;
+    span.style.backgroundColor="red";
+//    var imgHtml = "<img class='icon_edit' vertical-align:super onclick='testAlert()'/>";
+//    document.execCommand('insertHTML', false, imgHtml);
+
+   }
+}
+
+
+
+
 

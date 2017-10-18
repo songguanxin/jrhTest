@@ -2,11 +2,16 @@ package cn.jrhlive.richeditor.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.ActionMode;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
 import android.webkit.ValueCallback;
@@ -14,14 +19,19 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
+import cn.jrhlive.richeditor.RichFunction;
+import cn.jrhlive.richeditor.ui.EditorMarkActivity;
 import cn.jrhlive.richeditor.widgets.bean.FontStyleType;
+import cn.jrhlive.richeditor.widgets.listener.ActionSelectListener;
 import cn.jrhlive.richeditor.widgets.listener.AfterInitialLoadListener;
 import cn.jrhlive.richeditor.widgets.listener.OnDecorationStateListener;
 import cn.jrhlive.richeditor.widgets.listener.OnTextChangeListener;
@@ -45,6 +55,18 @@ public class RichEditorView extends WebView {
     private OnTextChangeListener mTextChangeListener;
     private OnDecorationStateListener mDecorationStateListener;
     private int contentLength;
+
+    /**
+     * 自定义长按弹出框-------start--------
+     */
+    ActionMode mActionMode;
+
+    List<String> mActionList = new ArrayList<>();
+
+    ActionSelectListener mActionSelectListener;
+    /**
+     * 自定义长按弹出框-------end--------
+     */
 
 
     public RichEditorView(Context context) {
@@ -85,7 +107,8 @@ public class RichEditorView extends WebView {
 
         setWebViewClient(createWebviewClient());
         loadUrl(SETUP_HTML);
-        addJavascriptInterface(this, "android");
+        initAlert(this);
+        //addJavascriptInterface(this, "android");
 //        evaluateJavaScript(this);
         applyAttributes(context, attrs);
         setWebChromeClient(new WebChromeClient(){
@@ -94,6 +117,57 @@ public class RichEditorView extends WebView {
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
                 ToastUtil.showMessage(message);
                 return super.onJsAlert(view, url, message, result);
+            }
+        });
+    }
+
+
+    /**
+     * 初始化弹出框
+     * @param richEditorView
+     */
+    public void initAlert(final RichEditorView richEditorView) {
+        List<String> list = new ArrayList<>();
+        list.add("批注");
+
+        //设置item
+        richEditorView.setActionList(list);
+
+        //链接js注入接口，使能选中返回数据
+        richEditorView.linkJSInterface();
+
+        richEditorView.getSettings().setBuiltInZoomControls(true);
+        richEditorView.getSettings().setDisplayZoomControls(false);
+        //使用javascript
+        richEditorView.getSettings().setJavaScriptEnabled(true);
+        richEditorView.getSettings().setDomStorageEnabled(true);
+        richEditorView.setActionSelectListener(new ActionSelectListener() {
+            @Override
+            public void onClick(String title, final String selectText) {
+                switch (title) {
+                    case "批注":
+                        final Context context = richEditorView.getContext();
+                        final EditorDialog dialog=new EditorDialog(context);
+                        dialog.setOnConfirmListener(new EditorDialog.OnConfirmListener() {
+                            @Override
+                            public void onConfirm(String str) {
+                                Intent intent=new Intent(context, EditorMarkActivity.class);
+                                intent.putExtra(EditorMarkActivity.EDITOR_MARK_AUTHOR,str);
+                                intent.putExtra(EditorMarkActivity.EDITOR_NO_CHANGE_TEXT,selectText);
+                                context.startActivity(intent);
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.setOnShutDownListener(new EditorDialog.OnShutDownListener(){
+
+                            @Override
+                            public void onShutDown() {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                        break;
+                }
             }
         });
     }
@@ -425,4 +499,172 @@ public class RichEditorView extends WebView {
 
         return contentLength;
     }
+
+    /**
+     * 处理相关点击事件---------------------------------------------------------start
+     */
+
+    /**
+     * 处理item，处理点击
+     * @param actionMode
+     */
+    private ActionMode resolveActionMode(ActionMode actionMode) {
+        if (actionMode != null) {
+            final Menu menu = actionMode.getMenu();
+            mActionMode = actionMode;
+            menu.clear();
+            for (int i = 0; i < mActionList.size(); i++) {
+                menu.add(mActionList.get(i));
+            }
+            for (int i = 0; i < menu.size(); i++) {
+                MenuItem menuItem = menu.getItem(i);
+                menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+//                        getSelectedData((String) item.getTitle());
+                        replaceTextToSpan((String) item.getTitle());
+                        releaseAction();
+                        return true;
+                    }
+                });
+            }
+        }
+        mActionMode = actionMode;
+        return actionMode;
+    }
+
+    //设置判断是弹出复制粘贴框还是弹出批注框
+    boolean showPiZhu=false;
+    public void setLongPressMode(boolean showPiZhu) {
+        this.showPiZhu=showPiZhu;
+    }
+
+    public boolean getLongPressMode() {
+        return showPiZhu;
+    }
+
+    @Override
+    public ActionMode startActionMode(ActionMode.Callback callback) {
+        ActionMode actionMode = super.startActionMode(callback);
+        if (showPiZhu) {
+            return resolveActionMode(actionMode);
+        } else {
+            return actionMode;
+        }
+    }
+
+    @Override
+    public ActionMode startActionMode(ActionMode.Callback callback, int type) {
+        ActionMode actionMode = super.startActionMode(callback, type);
+        if (showPiZhu) {
+            return resolveActionMode(actionMode);
+        } else {
+            return actionMode;
+        }
+    }
+
+    private void releaseAction() {
+        if (mActionMode != null) {
+            mActionMode.finish();
+            mActionMode = null;
+        }
+    }
+
+    /**
+     * 点击的时候，获取网页中选择的文本，回掉到原生中的js接口
+     * @param title 传入点击的item文本，一起通过js返回给原生接口
+     */
+    private void getSelectedData(String title) {
+        String js = "(function getSelectedText() {" +
+                "var txt;" +
+                "var selection;"+
+                "var title = \"" + title + "\";" +
+                "if (window.getSelection) {" +
+                "selection= window.getSelection();"+
+                "txt = window.getSelection().toString();" +
+                "console.log(txt);"
+                + "selection.deleteFromDocument();"
+                + "var range = sel.getRangeAt(0);"
+                + "var selFrag = range.cloneContents();"
+                + "var span = document.createElement('span');"
+                + "span.innerHTML = txt;"
+                +"console.log(span.innerHTML);"
+                + "span.style.backgroundColor=\"red\";"
+                + "range.insertNode(span);"
+                + "}"
+                + "android.callback(txt,title);" + "})()"
+                ;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            evaluateJavascript("javascript:" + js, null);
+        } else {
+            loadUrl("javascript:" + js);
+        }
+    }
+
+    public void replaceTextToSpan(String title) {
+        exec("javascript:RE.replaceSelectionText(\"" + title + "\");");
+    }
+
+    public void getSpan(int action,String text){
+        exec("javascript:RE.getSpan(\"" + action + "\",\""+text+"\");");
+    }
+
+    public void linkJSInterface() {
+        addJavascriptInterface(new ActionSelectInterface(this), "android");
+    }
+
+    /**
+     * 设置弹出action列表
+     * @param actionList
+     */
+    public void setActionList(List<String> actionList) {
+        mActionList = actionList;
+    }
+
+    /**
+     * 设置点击回掉
+     * @param actionSelectListener
+     */
+    public void setActionSelectListener(ActionSelectListener actionSelectListener) {
+        this.mActionSelectListener = actionSelectListener;
+    }
+    /**
+     * 隐藏消失Action
+     */
+    public void dismissAction() {
+        releaseAction();
+    }
+
+
+    /**
+     * js选中的回掉接口
+     */
+    private class ActionSelectInterface {
+
+        RichEditorView mContext;
+
+        ActionSelectInterface(RichEditorView c) {
+            mContext = c;
+        }
+
+        @JavascriptInterface
+        public void callback(final String title, final String value) {
+            if(mActionSelectListener != null) {
+                mActionSelectListener.onClick(value, title);
+            }
+        }
+    }
+
+    /**
+     * 处理相关点击事件---------------------------------------------------------end
+     */
+
+    public void addComment() {
+        exec("javascript:RE.addComments();");
+
+    }
+
+//    public void replaceTextToSpan(String selectText) {
+//        exec("javascript:RE.replaceSelectionText("+selectText+");");
+//    }
 }
